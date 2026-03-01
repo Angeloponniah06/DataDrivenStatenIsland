@@ -81,7 +81,7 @@ def init_db():
                 'series_id': 'NYRICH5URN',
                 'api_key': FRED_API_KEY,
                 'file_type': 'json',
-                'observation_start': '2016-01-01',
+                'observation_start': '2014-01-01',
                 'observation_end': '2025-12-31'
             }
             
