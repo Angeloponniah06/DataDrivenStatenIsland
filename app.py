@@ -2,8 +2,14 @@ from flask import Flask, render_template, request, jsonify
 import json
 import os
 import sqlite3
+import requests
+from datetime import datetime
 
 app = Flask(__name__)
+
+# FRED API Configuration
+FRED_API_KEY = '3cddf79d5604a832019162f50334e76a'
+FRED_BASE_URL = 'https://api.stlouisfed.org/fred/series/observations'
 
 # Database configuration
 DATABASE = 'data.db'
@@ -67,24 +73,65 @@ def init_db():
     cursor.execute('SELECT COUNT(*) FROM employment_data')
     count = cursor.fetchone()[0]
     
-    # If no data exists, load from JSON file
+    # If no data exists, fetch from FRED API
     if count == 0:
-        data_path = os.path.join(app.root_path, "employment_data.json")
         try:
-            with open(data_path, "r") as f:
-                data = json.load(f)
+            # Fetch unemployment rate data from FRED API
+            params = {
+                'series_id': 'NYRICH5URN',
+                'api_key': FRED_API_KEY,
+                'file_type': 'json',
+                'observation_start': '2016-01-01',
+                'observation_end': '2025-12-31'
+            }
             
-            # Insert data from JSON
-            for entry in data.get('series', []):
+            response = requests.get(FRED_BASE_URL, params=params)
+            response.raise_for_status()
+            fred_data = response.json()
+            
+            # Process FRED data: aggregate by year (take annual average)
+            yearly_data = {}
+            for observation in fred_data.get('observations', []):
+                if observation['value'] != '.':  # Skip missing values
+                    date = datetime.strptime(observation['date'], '%Y-%m-%d')
+                    year = date.year
+                    unemployment_rate = float(observation['value'])
+                    
+                    if year not in yearly_data:
+                        yearly_data[year] = []
+                    yearly_data[year].append(unemployment_rate)
+            
+            # Calculate annual averages and insert into database
+            for year in sorted(yearly_data.keys()):
+                avg_unemployment = round(sum(yearly_data[year]) / len(yearly_data[year]), 1)
+                avg_employment = round(100 - avg_unemployment, 1)
+                
                 cursor.execute('''
                     INSERT INTO employment_data (year, unemployment_rate, employment_rate)
                     VALUES (?, ?, ?)
-                ''', (entry['year'], entry['unemployment_rate'], entry['employment_rate']))
+                ''', (year, avg_unemployment, avg_employment))
             
             conn.commit()
-            print("Database initialized with employment data from JSON")
+            print(f"Database initialized with employment data from FRED API for {len(yearly_data)} years")
         except Exception as e:
-            print(f"Error initializing employment database: {e}")
+            print(f"Error fetching data from FRED API: {e}")
+            print("Falling back to JSON file...")
+            # Fallback to JSON file if API fails
+            data_path = os.path.join(app.root_path, "employment_data.json")
+            try:
+                with open(data_path, "r") as f:
+                    data = json.load(f)
+                
+                for entry in data.get('series', []):
+                    cursor.execute('''
+                        INSERT INTO employment_data (year, unemployment_rate, employment_rate)
+                        VALUES (?, ?, ?)
+                    ''', (entry['year'], entry['unemployment_rate'], entry['employment_rate']))
+                
+                conn.commit()
+                print("Database initialized with employment data from JSON fallback")
+            except Exception as json_error:
+                print(f"Error loading JSON fallback: {json_error}")
     
     conn.close()
 
@@ -115,20 +162,38 @@ def api_employment():
     """
     Returns a simple time series of employment/unemployment rates
     for Staten Island from the database.
+    Supports optional query parameters: start_year, end_year
     """
     try:
+        # Get optional date range parameters
+        start_year = request.args.get('start_year', type=int)
+        end_year = request.args.get('end_year', type=int)
+        
+        print(f"DEBUG: start_year={start_year}, end_year={end_year}")  # Debug
+        
         conn = get_db()
         cursor = conn.cursor()
         
-        # Query all employment data ordered by year
-        cursor.execute('''
-            SELECT year, unemployment_rate, employment_rate
-            FROM employment_data
-            ORDER BY year
-        ''')
+        # Build query with optional date filtering
+        query = 'SELECT year, unemployment_rate, employment_rate FROM employment_data WHERE 1=1'
+        params = []
         
+        if start_year:
+            query += ' AND year >= ?'
+            params.append(start_year)
+        if end_year:
+            query += ' AND year <= ?'
+            params.append(end_year)
+        
+        query += ' ORDER BY year'
+        
+        print(f"DEBUG: SQL query={query}, params={params}")  # Debug
+        
+        cursor.execute(query, params)
         rows = cursor.fetchall()
         conn.close()
+        
+        print(f"DEBUG: Rows returned={len(rows)}")  # Debug
         
         # Convert rows to list of dictionaries
         series = []
@@ -143,7 +208,7 @@ def api_employment():
         response_data = {
             'area': 'Staten Island (Richmond County, NY)',
             'series': series,
-            'source_notes': 'Employment data retrieved from database'
+            'source_notes': 'Unemployment rates for Richmond County (Staten Island) from FRED API (NYRICH5URN). Employment rate calculated as 100 minus unemployment rate.'
         }
         
         return jsonify(response_data)
@@ -154,18 +219,30 @@ def api_business():
     """
     Returns a simple time series of business openings/closures
     for Staten Island from the database.
+    Supports optional query parameters: start_year, end_year
     """
     try:
+        # Get optional date range parameters
+        start_year = request.args.get('start_year', type=int)
+        end_year = request.args.get('end_year', type=int)
+        
         conn = get_db()
         cursor = conn.cursor()
         
-        # Query all business data ordered by year
-        cursor.execute('''
-            SELECT year, new_businesses, closed_businesses, net_change
-            FROM business_data
-            ORDER BY year
-        ''')
+        # Build query with optional date filtering
+        query = 'SELECT year, new_businesses, closed_businesses, net_change FROM business_data WHERE 1=1'
+        params = []
         
+        if start_year:
+            query += ' AND year >= ?'
+            params.append(start_year)
+        if end_year:
+            query += ' AND year <= ?'
+            params.append(end_year)
+        
+        query += ' ORDER BY year'
+        
+        cursor.execute(query, params)
         rows = cursor.fetchall()
         conn.close()
         
@@ -191,9 +268,9 @@ def api_business():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    # For production (AWS Lightsail)
-    app.run(host='0.0.0.0', port=8000)
+    # For local development
+    app.run(host='0.0.0.0', port=8000, debug=True)
     
-    # For local development, comment out the line above and uncomment this:
-    # app.run(debug=True)
+    # For production (AWS Lightsail), use:
+    # app.run(host='0.0.0.0', port=8000)
 
