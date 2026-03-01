@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Chart.js CDN (we'll use later if needed here) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+        }
+
+        /* Top nav bar */
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        nav a {
+            color: #d0e4ff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Hero with background image overlay */
+        .hero {
+            position: relative;
+            height: 340px;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            overflow: hidden;
+            background: radial-gradient(circle at top left, #123c64, #020617);
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.85)),
+                url("https://images.pexels.com/photos/3785708/pexels-photo-3785708.jpeg");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+        .hero-title {
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .hero-subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 22px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-primary {
+            background: #1d9bf0;
+            border-radius: 999px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            color: #0b1120;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #38bdf8;
+        }
+        .btn-ghost {
+            background: transparent;
+            border-radius: 999px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #64748b;
+            color: #e2e8f0;
+            cursor: pointer;
+        }
+        .btn-ghost:hover {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        main {
+            padding: 30px 60px 60px;
+        }
+
+        /* Simple slideshow */
+        .carousel {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 24px;
+            margin-top: -80px;
+        }
+        .carousel-card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.65);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .carousel-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .carousel-subtitle {
+            font-size: 12px;
+            opacity: 0.75;
+        }
+        .carousel-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #bfdbfe;
+            border: 1px solid rgba(96, 165, 250, 0.8);
+        }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: block;
+        }
+        .slide-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .slide-meta {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-bottom: 10px;
+        }
+        .slide-body {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            font-size: 12px;
+        }
+        .badge-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(52, 211, 153, 0.9);
+            color: #bbf7d0;
+            background: rgba(22, 163, 74, 0.1);
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #475569;
+            cursor: pointer;
+        }
+        .dot.active {
+            background: #e5f2ff;
+        }
+
+        /* “How it helps Staten Island” side block */
+        .info-card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+        .info-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .info-list {
+            list-style: none;
+            padding-left: 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .info-list li {
+            margin-bottom: 6px;
+        }
+            footer {
+        margin-top: 40px;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        background: #020617;
+    }
+    .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 24px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: #9ca3af;
+    }
+    .footer-brand {
+        font-weight: 600;
+        color: #e5e7eb;
+    }
+    .footer-links a {
+        color: #9ca3af;
+        text-decoration: none;
+        margin: 0 4px;
+    }
+    .footer-links a:hover {
+        color: #e5e7eb;
+        text-decoration: underline;
+    }
+    .footer-links span {
+        opacity: 0.6;
+        margin: 0 2px;
+    }
+    @media (max-width: 960px) {
+        .footer-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Data Driven Staten Island</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+         <a href="/about">About & Data</a>
+        <!-- later: /resources, /about -->
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-title">Smart insights for Staten Island's local economy.</div>
+        <div class="hero-subtitle">
+            A data-driven dashboard that brings together borough-level employment, small business,
+            transportation, and community opportunity data to support Staten Island business owners,
+            nonprofits, and CSI students.
+        </div>
+        <div class="hero-actions">
+            <button class="btn-primary" onclick="window.location.href='/dashboard'">
+                View Economic Dashboard
+            </button>
+            <button class="btn-ghost" onclick="window.location.href='/resources'">
+    Explore Community Resources
+</button>
+
+        </div>
+    </div>
+</section>
+
+<main>
+    <section class="carousel">
+        <!-- Left: slideshow of small business stories -->
+        <div class="carousel-card">
+            <div class="carousel-header">
+                <div>
+                    <div class="carousel-title">Local Opportunities Spotlight</div>
+                    <div class="carousel-subtitle">Rotating highlights from Staten Island’s business community</div>
+                </div>
+                <span class="carousel-tag">Demo data</span>
+            </div>
+
+            <div id="slide-1" class="slide active">
+                <div class="slide-title">Bay Street Coffee – Hiring Part‑Time Barista</div>
+                <div class="slide-meta">St. George • 18–22 hrs/week • Evening & weekend shifts</div>
+                <div class="slide-body">
+                    Bay Street Coffee is looking for a CSI student to support the evening rush near the ferry.
+                    Responsibilities include customer service, POS, and helping with social media posts.
+                </div>
+                <div class="slide-footer">
+                    <span class="badge-pill">Student‑friendly job</span>
+                    <span>Starting: $18/hour</span>
+                </div>
+            </div>
+
+            <div id="slide-2" class="slide">
+                <div class="slide-title">Island Tech Repair – Paid Internship</div>
+                <div class="slide-meta">New Dorp • 10–15 hrs/week • Flexible schedule</div>
+                <div class="slide-body">
+                    Small electronics shop seeking an intern to help manage inventory and create a simple CRM
+                    dashboard using Excel or Python. Great fit for Information Systems majors.
+                </div>
+                <div class="slide-footer">
+                    <span class="badge-pill">Tech & analytics</span>
+                    <span>Stipend + credit eligible</span>
+                </div>
+            </div>
+
+            <div id="slide-3" class="slide">
+                <div class="slide-title">Stapleton Market – Vendor Opportunities</div>
+                <div class="slide-meta">Stapleton • Seasonal • Weekend pop‑up booths</div>
+                <div class="slide-body">
+                    The local market is opening applications for food and craft vendors from Staten Island.
+                    The dashboard will eventually track foot traffic and seasonal sales patterns here.
+                </div>
+                <div class="slide-footer">
+                    <span class="badge-pill">Small business support</span>
+                    <span>Applications open now</span>
+                </div>
+            </div>
+
+            <div class="carousel-dots">
+                <div class="dot active" onclick="showSlide(1)"></div>
+                <div class="dot" onclick="showSlide(2)"></div>
+                <div class="dot" onclick="showSlide(3)"></div>
+            </div>
+        </div>
+
+        <!-- Right: explanation card -->
+        <div class="info-card">
+            <div class="info-title">How this dashboard supports Staten Island</div>
+            <ul class="info-list">
+                <li>• Helps small businesses spot trends in employment, rent, and transit usage.</li>
+                <li>• Highlights student jobs, internships, and training programs across the borough.</li>
+                <li>• Gives community organizations a simple way to reference borough‑level data.</li>
+                <li>• Demonstrates how professional‑grade analytics can be localized for one community.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Mission + video section -->
+    <section class="mission-section">
+        <div class="mission-card">
+            <h2 class="mission-title">Our Mission</h2>
+            <p class="mission-text">
+    Our mission is to give Staten Island's residents, small businesses, and community organizations
+    clear, trustworthy economic information so they can make better decisions for their future.
+    By turning complex public datasets into accessible visuals, the dashboard helps people see how
+    employment, transportation, and business activity are changing across the borough.
+</p>
+<p class="mission-text">
+    We believe that local data should be as easy to understand as a neighborhood conversation.
+    This platform is designed to support everyday choices, opening a shop, hiring staff, applying for grants,
+    or finding a first job by putting Staten Island's economic story in one place for everyone to use.
+</p>
+
+        </div>
+
+        <div class="media-card">
+            <div class="media-header">
+                <span class="media-title">See the dashboard in action</span>
+                <span class="media-tag">Prototype walk-through</span>
+            </div>
+            <div class="media-body">
+                <!-- Replace src with your own YouTube video later if you record one -->
+                <div class="video-wrapper">
+                    <iframe
+    src="https://www.youtube.com/embed/7D2N0qSBm1o"
+    title="Discovering NYC Open Data"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+></iframe>
+
+                </div>
+                <p class="media-caption">
+                    This embedded video slot is designed for a short CSI‑style presentation where you walk through
+                    the dashboard, explain the data sources, and highlight how a Staten Island business could use
+                    the insights to make decisions.
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+    // Simple JS to rotate slides every 8 seconds and support dot click
+    let currentSlide = 1;
+    const totalSlides = 3;
+
+    function setActiveSlide(index) {
+        for (let i = 1; i <= totalSlides; i++) {
+            const slide = document.getElementById(`slide-${i}`);
+            const dot = document.getElementsByClassName('dot')[i - 1];
+            if (i === index) {
+                slide.classList.add('active');
+                dot.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+                dot.classList.remove('active');
+            }
+        }
+        currentSlide = index;
+    }
+
+    function showSlide(index) {
+        setActiveSlide(index);
+    }
+
+    setInterval(() => {
+        let next = currentSlide + 1;
+        if (next > totalSlides) {
+            next = 1;
+        }
+        setActiveSlide(next);
+    }, 8000);
+</script>
+<script>
+    // existing slideshow JS...
+</script>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven &amp; Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <span>•</span>
+            <a href="#">Terms of Use</a>
+            <span>•</span>
+            <a href="#">Accessibility</a>
+            <span>•</span>
+            <a href="#">Cookies Policy</a>
+            <span>•</span>
+            <a href="#">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "area": "Staten Island (Richmond County, NY)",
+  "series": [
+    { "year": 2019, "unemployment_rate": 3.9, "employment_rate": 96.1 },
+    { "year": 2020, "unemployment_rate": 9.1, "employment_rate": 90.9 },
+    { "year": 2021, "unemployment_rate": 7.0, "employment_rate": 93.0 },
+    { "year": 2022, "unemployment_rate": 5.5, "employment_rate": 94.5 },
+    { "year": 2023, "unemployment_rate": 4.8, "employment_rate": 95.2 },
+    { "year": 2024, "unemployment_rate": 4.2, "employment_rate": 95.8 }
+  ],
+  "source_notes": "Unemployment rates for Richmond County (Staten Island) derived from New York State Department of Labor Local Area Unemployment Statistics and FRED series NYRICH5URN (Richmond County unemployment rate). Employment rate approximated as 100 minus unemployment rate for visualization purposes."
+}

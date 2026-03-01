@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply – Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+        }
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        nav a {
+            color: #d0e4ff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 30px 60px 60px;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .page-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-bottom: 18px;
+        }
+
+        .form-card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 22px 24px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            max-width: 720px;
+        }
+        .field-row {
+            display: flex;
+            gap: 16px;
+        }
+        .field {
+            margin-bottom: 14px;
+            flex: 1;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: #f9fafb;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        input::file-selector-button {
+            background: #1d9bf0;
+            border: none;
+            padding: 6px 12px;
+            margin-right: 10px;
+            border-radius: 999px;
+            color: #020617;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        input::file-selector-button:hover {
+            background: #38bdf8;
+        }
+        .helper {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: #1d9bf0;
+            border-radius: 999px;
+            padding: 9px 22px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            color: #0b1120;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #38bdf8;
+        }
+        .btn-ghost {
+            background: transparent;
+            border-radius: 999px;
+            padding: 9px 20px;
+            font-size: 13px;
+            border: 1px solid #6b7280;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+        .btn-ghost:hover {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .note {
+            font-size: 11px;
+            opacity: 0.75;
+            margin-top: 12px;
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: #020617;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        .footer-brand {
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+        .footer-links a:hover {
+            color: #e5e7eb;
+            text-decoration: underline;
+        }
+        .footer-links span {
+            opacity: 0.6;
+            margin: 0 2px;
+        }
+        @media (max-width: 960px) {
+            main {
+                padding: 24px 20px 40px;
+            }
+            header {
+                padding: 14px 20px;
+            }
+            .field-row {
+                flex-direction: column;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Data Driven Staten Island</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About & Data</a>
+    </nav>
+</header>
+
+<main>
+    <div class="page-title">Application form</div>
+    <div class="page-subtitle">
+        Submit a demo application for:
+        <strong>
+            {% if job_id == "bay-street-coffee" %}
+                Bay Street Coffee – Part‑Time Barista
+            {% elif job_id == "island-tech-repair" %}
+                Island Tech Repair – IT &amp; Analytics Intern
+            {% elif job_id == "youth-council" %}
+                Staten Island Youth Council – Program Assistant
+            {% else %}
+                a Staten Island opportunity
+            {% endif %}
+        </strong>
+    </div>
+
+    <div class="form-card">
+        <div class="field-row">
+            <div class="field">
+                <label for="full_name">Full name</label>
+                <input id="full_name" type="text" placeholder="First and last name">
+            </div>
+            <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" type="email" placeholder="you@example.com">
+            </div>
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label for="phone">Phone number</label>
+                <input id="phone" type="text" placeholder="(555) 555‑5555">
+            </div>
+            <div class="field">
+                <label for="status">Current role / status</label>
+                <select id="status">
+                    <option>CSI undergraduate student</option>
+                    <option>CSI graduate student</option>
+                    <option>High school student</option>
+                    <option>Career‑changer / adult learner</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="resume">Upload resume (demo)</label>
+            <input id="resume" type="file">
+            <div class="helper">In this prototype, files are not actually stored; this field demonstrates the real workflow.</div>
+        </div>
+
+        <div class="field">
+            <label for="q1">Why are you interested in this opportunity?</label>
+            <textarea id="q1" placeholder="Briefly describe your interest and any relevant experience."></textarea>
+        </div>
+
+        <div class="field">
+            <label for="q2">What skills or coursework would you bring to this role?</label>
+            <textarea id="q2" placeholder="Mention specific classes, projects, or prior jobs."></textarea>
+        </div>
+
+        <div class="actions">
+            <button class="btn-primary" type="button" onclick="alert('Thank you! In the live system, this would submit your application for review.')">
+                Submit application
+            </button>
+            <button class="btn-ghost" type="button" onclick="window.history.back()">
+                Cancel
+            </button>
+        </div>
+
+        <div class="note">
+            This is a demonstration form for the capstone. In a production system, responses would be validated,
+            securely stored, and routed to business or campus partners for review.
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven &amp; Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <span>•</span>
+            <a href="#">Terms of Use</a>
+            <span>•</span>
+            <a href="#">Accessibility</a>
+            <span>•</span>
+            <a href="#">Cookies Policy</a>
+            <span>•</span>
+            <a href="#">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

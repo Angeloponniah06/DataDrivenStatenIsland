@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard – Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+        }
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 20px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .hero-title {
+            font-size: 26px;
+            font-weight: 700;
+        }
+        nav a {
+            color: #d0e4ff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        main {
+            padding: 30px 60px 60px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: #0b1220;
+            border-radius: 10px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .card-title {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .chart-container {
+            background: #0b1220;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .chart-title {
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+            footer {
+        margin-top: 40px;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        background: #020617;
+    }
+    .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 24px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: #9ca3af;
+    }
+    .footer-brand {
+        font-weight: 600;
+        color: #e5e7eb;
+    }
+    .footer-links a {
+        color: #9ca3af;
+        text-decoration: none;
+        margin: 0 4px;
+    }
+    .footer-links a:hover {
+        color: #e5e7eb;
+        text-decoration: underline;
+    }
+    .footer-links span {
+        opacity: 0.6;
+        margin: 0 2px;
+    }
+    @media (max-width: 960px) {
+        .footer-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+    }
+        .chart-filters {
+            margin: 24px 0 16px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+        }
+        .filter-group label {
+            margin-bottom: 4px;
+            opacity: 0.85;
+        }
+        .filter-group select {
+            background: #020617;
+            color: #e5e7eb;
+            border-radius: 999px;
+            border: 1px solid #4b5563;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        @media (max-width: 960px) {
+            .chart-filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+    
+</head>
+<body>
+<header>
+    <div class="hero-title">Data Driven Staten Island – Dashboard</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/about">About & Data</a>
+        <!-- later: /resources, /about -->
+    </nav>
+</header>
+
+<main>
+    <section class="cards">
+        <div class="card">
+            <div class="card-title">Staten Island Unemployment (sample)</div>
+            <div class="card-value">4.8%</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Small Business Count (sample)</div>
+            <div class="card-value">3,250</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Median Household Income (sample)</div>
+            <div class="card-value">$88,400</div>
+        </div>
+    </section>
+
+    <section class="chart-container">
+        <div class="chart-title">Sample Employment Trend (Staten Island)</div>
+        <canvas id="employmentChart" height="80"></canvas>
+    </section>
+    <section class="chart-filters">
+    <div class="filter-group">
+        <label for="yearRange">Year range</label>
+        <select id="yearRange">
+            <option value="all">2019–2024 (all)</option>
+            <option value="recent">2021–2024 (recent)</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label for="businessMetric">Business metric</label>
+        <select id="businessMetric">
+            <option value="new_businesses">New businesses opened</option>
+            <option value="closed_businesses">Businesses closed</option>
+            <option value="net_change">Net change</option>
+        </select>
+    </div>
+</section>
+
+<section class="chart-container">
+    <div class="chart-title">Small Business Dynamics (Staten Island)</div>
+    <canvas id="businessChart" height="80"></canvas>
+</section>
+
+</main>
+
+<script>
+    let employmentChartInstance = null;
+    let businessChartInstance = null;
+    let businessRawData = [];
+    let businessCtx = null;
+    async function loadEmploymentChart() {
+        const ctx = document.getElementById('employmentChart').getContext('2d');
+
+        let years = [];
+        let unemployment = [];
+        let employment = [];
+
+        try {
+            const response = await fetch('/api/employment');
+            const data = await response.json();
+
+            if (data.series && Array.isArray(data.series)) {
+                data.series.forEach(point => {
+                    years.push(point.year);
+                    unemployment.push(point.unemployment_rate);
+                    employment.push(point.employment_rate);
+                });
+            }
+        } catch (err) {
+            console.error('Error loading employment data:', err);
+            years = ['2019', '2020', '2021', '2022', '2023', '2024'];
+            unemployment = [3.9, 8.5, 7.2, 6.1, 5.2, 4.8];
+            employment = [96.1, 91.5, 92.8, 93.9, 94.8, 95.2];
+        }
+
+        employmentChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'Unemployment Rate (%)',
+                        data: unemployment,
+                        borderColor: '#4fd1c5',
+                        backgroundColor: 'rgba(79, 209, 197, 0.15)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#4fd1c5'
+                    },
+                    {
+                        label: 'Employment Rate (%)',
+                        data: employment,
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.08)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.35,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#60a5fa'
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#f5f5f5'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                    },
+                    y: {
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                    }
+                }
+            }
+        });
+    }
+
+   async function loadBusinessDataAndChart() {
+    businessCtx = document.getElementById('businessChart').getContext('2d');
+
+        try {
+            const response = await fetch('/api/business');
+            const data = await response.json();
+            if (data.series && Array.isArray(data.series)) {
+                businessRawData = data.series;
+            } else {
+                businessRawData = [];
+            }
+        } catch (err) {
+            console.error('Error loading business data:', err);
+            businessRawData = [];
+        }
+
+        updateBusinessChart(); // initial render
+    }
+
+        function updateBusinessChart() {
+        const yearRangeSelect = document.getElementById('yearRange');
+        const metricSelect = document.getElementById('businessMetric');
+
+        const range = yearRangeSelect.value; // "all" or "recent"
+        const metric = metricSelect.value;   // "new_businesses", etc.
+
+        let filtered = businessRawData.slice();
+
+        if (range === 'recent') {
+            filtered = filtered.filter(p => p.year >= 2021);
+        }
+
+        const labels = filtered.map(p => p.year);
+        const values = filtered.map(p => p[metric]);
+
+        const metricLabelMap = {
+            new_businesses: 'New businesses opened',
+            closed_businesses: 'Businesses closed',
+            net_change: 'Net change'
+        };
+
+        if (businessChartInstance) {
+            businessChartInstance.data.labels = labels;
+            businessChartInstance.data.datasets[0].label = metricLabelMap[metric] || 'Value';
+            businessChartInstance.data.datasets[0].data = values;
+            businessChartInstance.update();
+            return;
+        }
+
+        if (!businessCtx) {
+            return; // safety: context not ready
+        }
+
+        businessChartInstance = new Chart(businessCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: metricLabelMap[metric] || 'Value',
+                    data: values,
+                    backgroundColor: 'rgba(96, 165, 250, 0.6)',
+                    borderColor: '#60a5fa',
+                    borderWidth: 1.5,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: { color: '#f5f5f5' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                    },
+                    y: {
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                    }
+                }
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadEmploymentChart();
+        await loadBusinessDataAndChart();
+
+        document.getElementById('yearRange').addEventListener('change', updateBusinessChart);
+        document.getElementById('businessMetric').addEventListener('change', updateBusinessChart);
+    });
+</script>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven &amp; Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <span>•</span>
+            <a href="#">Terms of Use</a>
+            <span>•</span>
+            <a href="#">Accessibility</a>
+            <span>•</span>
+            <a href="#">Cookies Policy</a>
+            <span>•</span>
+            <a href="#">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+</body>
+</html>

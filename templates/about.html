@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About & Data – Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+        }
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand { font-size: 22px; font-weight: 700; }
+        nav a {
+            color: #d0e4ff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover { color: #ffffff; text-decoration: underline; }
+
+        main {
+            padding: 30px 60px 60px;
+        }
+        h1 { font-size: 26px; margin-bottom: 8px; }
+        h2 { font-size: 18px; margin-top: 26px; margin-bottom: 8px; }
+        p { font-size: 13px; line-height: 1.6; opacity: 0.95; }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+            gap: 22px;
+            margin-top: 16px;
+        }
+        .card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            font-size: 13px;
+        }
+        .card-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(96, 165, 250, 0.8);
+            color: #bfdbfe;
+            background: rgba(30, 64, 175, 0.18);
+            margin-bottom: 8px;
+        }
+        ul { padding-left: 18px; font-size: 13px; }
+        li { margin-bottom: 4px; }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: #020617;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        .footer-brand { font-weight: 600; color: #e5e7eb; }
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+        .footer-links a:hover { color: #e5e7eb; text-decoration: underline; }
+        .footer-links span { opacity: 0.6; margin: 0 2px; }
+
+        @media (max-width: 960px) {
+            main { padding: 24px 20px 40px; }
+            header { padding: 14px 20px; }
+            .data-grid { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Data Driven Staten Island</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About &amp; Data</a>
+    </nav>
+</header>
+
+<main>
+    <h1>About this dashboard</h1>
+    <p>
+        Data Driven Staten Island is a prototype decision‑support dashboard developed as a capstone
+        project for the Verrazzano Honors Program and ISI 490 at the College of Staten Island.
+        It aggregates publicly available statistics and locally curated information to help
+        Staten Island stakeholders understand employment and small‑business dynamics.
+    </p>
+
+    <h2>Data sources & update schedule</h2>
+
+    <section class="data-grid">
+        <div class="card">
+            <div class="card-title">Employment & unemployment (labor chart)</div>
+            <div class="badge">Source: official labor statistics</div>
+            <ul>
+                <li>Geography: Richmond County, NY (Staten Island).</li>
+                <li>
+                    Annual unemployment rates derived from New York State Department of Labor
+                    Local Area Unemployment Statistics and the FRED series “Unemployment Rate in
+                    Richmond County, NY (NYRICH5URN)”.
+                </li>
+                <li>
+                    Employment rate in the chart is approximated as 100 minus the unemployment rate
+                    for each year, used for visualization purposes.
+                </li>
+                <li>
+                    Data is stored in <code>employment_data.json</code> and can be refreshed each
+                    year when new LAUS / ACS releases become available.
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Small business dynamics (business chart)</div>
+            <div class="badge">Source: derived / illustrative</div>
+            <ul>
+                <li>
+                    Metric represents the approximate number of small businesses opening and closing
+                    per year in Staten Island, calibrated to trends described in NYC small‑business
+                    reports and NYS DOL QCEW sector data.
+                </li>
+                <li>
+                    Exact counts are not published in a single open dataset; the values in
+                    <code>business_data.json</code> are used to demonstrate how the dashboard would
+                    behave with real Chamber or QCEW feeds.
+                </li>
+                <li>
+                    In a production deployment, these figures would be replaced with automated pulls
+                    from official economic development or Chamber data sources.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <h2>Update strategy</h2>
+    <p>
+        In this prototype, JSON files are updated manually at least once per year using the most
+        recent ACS and New York State Department of Labor releases. In a future iteration,
+        the Flask API endpoints (<code>/api/employment</code> and <code>/api/business</code>)
+        could be connected directly to Census and NY DOL APIs to automate refreshes on a monthly
+        or annual basis.
+    </p>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven &amp; Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a><span>•</span>
+            <a href="#">Terms of Use</a><span>•</span>
+            <a href="#">Accessibility</a><span>•</span>
+            <a href="#">Cookies Policy</a><span>•</span>
+            <a href="#">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

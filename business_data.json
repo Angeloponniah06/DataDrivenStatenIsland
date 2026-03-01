@@ -1,0 +1,12 @@
+{
+  "area": "Staten Island (Richmond County, NY)",
+  "series": [
+    { "year": 2019, "new_businesses": 260, "closed_businesses": 150, "net_change": 110 },
+    { "year": 2020, "new_businesses": 190, "closed_businesses": 230, "net_change": -40 },
+    { "year": 2021, "new_businesses": 220, "closed_businesses": 180, "net_change": 40 },
+    { "year": 2022, "new_businesses": 270, "closed_businesses": 170, "net_change": 100 },
+    { "year": 2023, "new_businesses": 290, "closed_businesses": 180, "net_change": 110 },
+    { "year": 2024, "new_businesses": 305, "closed_businesses": 185, "net_change": 120 }
+  ],
+  "source_notes": "Illustrative counts of business openings/closures for Staten Island, calibrated to trends described in NYC small business and NYS DOL QCEW reports for retail and services sectors. These values are used to demonstrate dashboard functionality; exact counts should be updated from official QCEW or local Chamber data for production use."
+}
