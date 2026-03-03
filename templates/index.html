@@ -223,45 +223,242 @@
         .info-list li {
             margin-bottom: 6px;
         }
-            footer {
-        margin-top: 40px;
-        border-top: 1px solid rgba(148, 163, 184, 0.25);
-        background: #020617;
-    }
-    .footer-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 14px 24px 18px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-        color: #9ca3af;
-    }
-    .footer-brand {
-        font-weight: 600;
-        color: #e5e7eb;
-    }
-    .footer-links a {
-        color: #9ca3af;
-        text-decoration: none;
-        margin: 0 4px;
-    }
-    .footer-links a:hover {
-        color: #e5e7eb;
-        text-decoration: underline;
-    }
-    .footer-links span {
-        opacity: 0.6;
-        margin: 0 2px;
-    }
-    @media (max-width: 960px) {
-        .footer-inner {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
+
+        /* Mission section */
+        .mission-section {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 24px;
+            margin-top: 40px;
         }
-    }
+        .mission-card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+        .mission-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .mission-text {
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+        .media-card {
+            background: #020617;
+            border-radius: 16px;
+            padding: 20px 22px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+        .media-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .media-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .media-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(234, 179, 8, 0.15);
+            color: #fef08a;
+            border: 1px solid rgba(234, 179, 8, 0.8);
+        }
+        .media-body {
+            font-size: 13px;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .media-caption {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: #020617;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        .footer-brand {
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .footer-sub {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+        .footer-links a:hover {
+            color: #e5e7eb;
+            text-decoration: underline;
+        }
+        .footer-links span {
+            opacity: 0.6;
+            margin: 0 2px;
+        }
+
+        /* Tablet and below (960px) */
+        @media (max-width: 960px) {
+            header {
+                padding: 16px 24px;
+            }
+            .brand {
+                font-size: 20px;
+            }
+            nav a {
+                margin-left: 16px;
+                font-size: 13px;
+            }
+            .hero {
+                height: 280px;
+                padding: 0 24px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            .hero-subtitle {
+                font-size: 15px;
+            }
+            main {
+                padding: 24px 24px 40px;
+            }
+            .carousel {
+                grid-template-columns: 1fr;
+                margin-top: -60px;
+            }
+            .mission-section {
+                grid-template-columns: 1fr;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+
+        /* Mobile (640px) */
+        @media (max-width: 640px) {
+            header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .brand {
+                font-size: 18px;
+            }
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            nav a {
+                margin-left: 0;
+                font-size: 12px;
+            }
+            .hero {
+                height: auto;
+                min-height: 240px;
+                padding: 40px 16px;
+            }
+            .hero-title {
+                font-size: 22px;
+            }
+            .hero-subtitle {
+                font-size: 14px;
+                margin-bottom: 18px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+            .btn-primary, .btn-ghost {
+                width: 100%;
+                text-align: center;
+            }
+            main {
+                padding: 20px 16px 32px;
+            }
+            .carousel {
+                margin-top: -40px;
+            }
+            .carousel-card {
+                padding: 16px 18px;
+            }
+            .carousel-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .carousel-title {
+                font-size: 15px;
+            }
+            .slide-title {
+                font-size: 16px;
+            }
+            .slide-meta {
+                font-size: 11px;
+            }
+            .slide-body {
+                font-size: 12px;
+            }
+            .info-card {
+                padding: 16px 18px;
+            }
+            .mission-card {
+                padding: 16px 18px;
+            }
+            .mission-title {
+                font-size: 16px;
+            }
+            .media-card {
+                padding: 16px 18px;
+            }
+        }
 
     </style>
 </head>

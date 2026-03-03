@@ -92,6 +92,29 @@
             .data-grid { grid-template-columns: 1fr; }
             .footer-inner { flex-direction: column; align-items: flex-start; gap: 6px; }
         }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .brand { font-size: 18px; }
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            nav a {
+                margin-left: 0;
+                font-size: 12px;
+            }
+            main { padding: 20px 16px 32px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 16px; }
+            .card { padding: 14px 16px; }
+        }
     </style>
 </head>
 <body>
