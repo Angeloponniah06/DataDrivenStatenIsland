@@ -53,21 +53,29 @@
             background: radial-gradient(circle at top left, #123c64, #020617);
             margin-bottom: 40px;
         }
-        .hero::before {
+        .hero-bg {
             content: "";
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(to bottom, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.85)),
-                url("https://images.pexels.com/photos/3785708/pexels-photo-3785708.jpeg");
             background-size: cover;
             background-position: center;
-            opacity: 0.9;
+            opacity: 0;
             z-index: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        .hero-bg.active {
+            opacity: 0.9;
+        }
+        .hero-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.25), rgba(3, 7, 18, 0.85));
+            z-index: 1;
         }
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 600px;
         }
         .hero-title {
@@ -299,6 +307,109 @@
             margin-top: 10px;
         }
 
+        /* Stats section */
+        .stats-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .stats-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .stats-subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #0b1220, #020617);
+            border-radius: 16px;
+            padding: 30px 20px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Partners section */
+        .partners-section {
+            margin-top: 50px;
+        }
+        .partners-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .partner-card {
+            background: #0b1220;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+        .partner-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        .partner-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .partner-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* CTA section */
+        .cta-section {
+            margin-top: 50px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .cta-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .cta-text {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
         footer {
             margin-top: 40px;
             border-top: 1px solid rgba(148, 163, 184, 0.25);
@@ -373,6 +484,12 @@
             }
             .mission-section {
                 grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             .footer-inner {
                 flex-direction: column;
@@ -461,6 +578,33 @@
             .media-card {
                 padding: 16px 18px;
             }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .stat-card {
+                padding: 20px 16px;
+            }
+            .stat-number {
+                font-size: 28px;
+            }
+            .partners-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section {
+                padding: 30px 20px;
+            }
+            .cta-title {
+                font-size: 20px;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .cta-buttons .btn-primary,
+            .cta-buttons .btn-ghost {
+                width: 100%;
+            }
         }
 
     </style>
@@ -478,6 +622,18 @@
 </header>
 
 <section class="hero">
+    <!-- Hero background slideshow -->
+    <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1600')"></div>
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?w=1600')"></div>
+    
     <div class="hero-content">
         <div class="hero-title">Smart insights for Staten Island's local economy.</div>
         <div class="hero-subtitle">
@@ -610,10 +766,86 @@
             </div>
         </div>
     </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="stats-title">Staten Island by the Numbers</div>
+        <div class="stats-subtitle">Key metrics that show the economic landscape of our borough</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">475K+</div>
+                <div class="stat-label">Residents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8,500+</div>
+                <div class="stat-label">Small Businesses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15K+</div>
+                <div class="stat-label">CSI Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$68K</div>
+                <div class="stat-label">Median Household Income</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners-section">
+        <div class="partners-title">Supporting Our Community Together</div>
+        <div class="partners-grid">
+            <div class="partner-card">
+                <div class="partner-icon">🎓</div>
+                <div class="partner-name">College of Staten Island</div>
+                <div class="partner-desc">Connecting students with local opportunities and real-world data experience</div>
+            </div>
+            <div class="partner-card">
+                <div class="partner-icon">🏢</div>
+                <div class="partner-name">Staten Island Chamber</div>
+                <div class="partner-desc">Supporting local businesses with insights and economic development resources</div>
+            </div>
+            <div class="partner-card">
+                <div class="partner-icon">🤝</div>
+                <div class="partner-name">Community Organizations</div>
+                <div class="partner-desc">Partnering with nonprofits to serve residents and strengthen neighborhoods</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="cta-title">Ready to Explore Staten Island's Data?</div>
+        <div class="cta-text">
+            Whether you're a business owner looking for market insights, a student seeking opportunities, 
+            or a community leader planning initiatives, our dashboard has the data you need to make informed decisions.
+        </div>
+        <div class="cta-buttons">
+            <button class="btn-primary" onclick="window.location.href='/dashboard'">
+                Open Dashboard
+            </button>
+            <button class="btn-ghost" onclick="window.location.href='/apply'">
+                Post an Opportunity
+            </button>
+        </div>
+    </section>
 </main>
 
 
 <script>
+    // Hero background slideshow - rotates every 6 seconds
+    let currentHeroBg = 0;
+    const heroBgElements = document.querySelectorAll('.hero-bg');
+    const totalHeroBgs = heroBgElements.length;
+
+    function rotateHeroBackground() {
+        heroBgElements[currentHeroBg].classList.remove('active');
+        currentHeroBg = (currentHeroBg + 1) % totalHeroBgs;
+        heroBgElements[currentHeroBg].classList.add('active');
+    }
+
+    setInterval(rotateHeroBackground, 6000);
+
     // Simple JS to rotate slides every 8 seconds and support dot click
     let currentSlide = 1;
     const totalSlides = 3;
@@ -644,9 +876,6 @@
         }
         setActiveSlide(next);
     }, 8000);
-</script>
-<script>
-    // existing slideshow JS...
 </script>
 
 <footer>
