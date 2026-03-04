@@ -602,6 +602,15 @@
                 const data = await response.json();
                 if (data.series && Array.isArray(data.series)) {
                     businessRawData = data.series;
+                    
+                    // Update business summary card with latest year
+                    if (businessRawData.length > 0) {
+                        const latestBusiness = businessRawData[businessRawData.length - 1];
+                        const businessCountValue = document.getElementById('businessCountValue');
+                        if (businessCountValue && latestBusiness) {
+                            businessCountValue.textContent = latestBusiness.new_businesses;
+                        }
+                    }
                 } else {
                     businessRawData = [];
                 }
@@ -710,6 +719,21 @@
                 const data = await response.json();
                 if (data.series && Array.isArray(data.series)) {
                     transitRawData = data.series;
+                    
+                    // Update transit summary card with latest year total ridership
+                    if (transitRawData.length > 0) {
+                        const latestTransit = transitRawData[transitRawData.length - 1];
+                        const transitRidershipValue = document.getElementById('transitRidershipValue');
+                        if (transitRidershipValue && latestTransit) {
+                            // Calculate total ridership (ferry + express bus + local bus + SIR)
+                            const total = (latestTransit.ferry_ridership || 0) + 
+                                        (latestTransit.express_bus_ridership || 0) + 
+                                        (latestTransit.local_bus_ridership || 0) + 
+                                        (latestTransit.sir_ridership || 0);
+                            const totalMillions = (total / 1000000).toFixed(1);
+                            transitRidershipValue.textContent = `${totalMillions}M`;
+                        }
+                    }
                 } else {
                     transitRawData = [];
                 }
@@ -916,9 +940,9 @@
             if (businessTrendEl && businessRawData.length >= 2) {
                 const firstYear = businessRawData[0];
                 const lastYear = businessRawData[businessRawData.length - 1];
-                const openedChange = lastYear.businesses_opened - firstYear.businesses_opened;
-                const openedPercent = ((openedChange / firstYear.businesses_opened) * 100).toFixed(1);
-                businessTrendEl.innerHTML = `New business openings ${openedChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(openedPercent)}% (${firstYear.businesses_opened} to ${lastYear.businesses_opened}). Peak growth occurred post-pandemic as the economy recovered.`;
+                const openedChange = lastYear.new_businesses - firstYear.new_businesses;
+                const openedPercent = ((openedChange / firstYear.new_businesses) * 100).toFixed(1);
+                businessTrendEl.innerHTML = `New business openings ${openedChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(openedPercent)}% (${firstYear.new_businesses} to ${lastYear.new_businesses}). Peak growth occurred post-pandemic as the economy recovered.`;
             }
 
             // Transit trend
@@ -945,7 +969,7 @@
             if (bottomLineEl && rentRawData.length >= 2 && businessRawData.length >= 2) {
                 const lastYear = businessRawData[businessRawData.length - 1];
                 const lastRent = rentRawData[rentRawData.length - 1].median_rent;
-                bottomLineEl.innerHTML = `Staten Island shows resilience with ${lastYear.businesses_opened} new businesses in 2025 despite median rent at $${lastRent.toLocaleString()}. The borough offers lower costs than Manhattan/Brooklyn while maintaining strong transit connections via ferry, express buses, and Staten Island Railway. Best opportunities exist near transit hubs where customer access is highest.`;
+                bottomLineEl.innerHTML = `Staten Island shows resilience with ${lastYear.new_businesses} new businesses in 2025 despite median rent at $${lastRent.toLocaleString()}. The borough offers lower costs than Manhattan/Brooklyn while maintaining strong transit connections via ferry, express buses, and Staten Island Railway. Best opportunities exist near transit hubs where customer access is highest.`;
             }
         }
 
