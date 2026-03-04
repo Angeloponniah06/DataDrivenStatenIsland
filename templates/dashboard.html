@@ -76,12 +76,22 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .chart-title {
             margin-bottom: 12px;
             font-size: 16px;
             font-weight: 600;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+            display: block;
+            min-height: 320px;
         }
 
         footer {
@@ -176,6 +186,12 @@
 
             .chart-container {
                 padding: 16px;
+                width: 100%;
+                margin-bottom: 25px;
+            }
+
+            canvas {
+                min-height: 280px !important;
             }
 
             .chart-filters {
@@ -247,10 +263,17 @@
             .chart-container {
                 padding: 12px;
                 margin-bottom: 20px;
+                width: 100%;
+                overflow-x: auto;
             }
 
             .chart-title {
                 font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            canvas {
+                min-height: 250px !important;
             }
 
             .chart-filters h3 {
@@ -349,13 +372,13 @@
 
         <section class="chart-container">
             <div class="chart-title">Sample Employment Trend (Staten Island)</div>
-            <canvas id="employmentChart" height="80"></canvas>
+            <canvas id="employmentChart"></canvas>
         </section>
 
 
         <section class="chart-container">
             <div class="chart-title">Small Business Dynamics (Staten Island)</div>
-            <canvas id="businessChart" height="80"></canvas>
+            <canvas id="businessChart"></canvas>
         </section>
 
     </main>
@@ -455,20 +478,35 @@
                     ]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             labels: {
-                                color: '#f5f5f5'
+                                color: '#f5f5f5',
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
                     },
                     scales: {
                         x: {
-                            ticks: { color: '#cbd5f5' },
+                            ticks: { 
+                                color: '#cbd5f5',
+                                font: {
+                                    size: 11
+                                }
+                            },
                             grid: { color: 'rgba(148, 163, 184, 0.15)' }
                         },
                         y: {
-                            ticks: { color: '#cbd5f5' },
+                            ticks: { 
+                                color: '#cbd5f5',
+                                font: {
+                                    size: 11
+                                }
+                            },
                             grid: { color: 'rgba(148, 163, 184, 0.15)' }
                         }
                     }
@@ -547,18 +585,35 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            labels: { color: '#f5f5f5' }
+                            labels: { 
+                                color: '#f5f5f5',
+                                font: {
+                                    size: 12
+                                }
+                            }
                         }
                     },
                     scales: {
                         x: {
-                            ticks: { color: '#cbd5f5' },
+                            ticks: { 
+                                color: '#cbd5f5',
+                                font: {
+                                    size: 11
+                                }
+                            },
                             grid: { color: 'rgba(148, 163, 184, 0.15)' }
                         },
                         y: {
-                            ticks: { color: '#cbd5f5' },
+                            ticks: { 
+                                color: '#cbd5f5',
+                                font: {
+                                    size: 11
+                                }
+                            },
                             grid: { color: 'rgba(148, 163, 184, 0.15)' }
                         }
                     }
