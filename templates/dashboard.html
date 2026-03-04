@@ -471,8 +471,6 @@
         }
 
         async function loadEmploymentChart() {
-            const ctx = document.getElementById('employmentChart').getContext('2d');
-
             let years = [];
             let unemployment = [];
             let employment = [];
@@ -515,6 +513,14 @@
                 employmentChartInstance.update();
                 return;
             }
+
+            // Get canvas context only when creating new chart
+            const canvas = document.getElementById('employmentChart');
+            if (!canvas) {
+                console.error('Employment chart canvas not found');
+                return;
+            }
+            const ctx = canvas.getContext('2d');
 
             employmentChartInstance = new Chart(ctx, {
                 type: 'line',

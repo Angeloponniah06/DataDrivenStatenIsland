@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employment Chart Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body { background: #060b16; color: white; padding: 20px; font-family: Arial; }
+        .chart-container { background: #0b1220; padding: 20px; border-radius: 10px; }
+        canvas { max-width: 100%; height: auto !important; }
+    </style>
+</head>
+<body>
+    <h1>Employment Chart Diagnostic Test</h1>
+    <div id="status">Loading...</div>
+    <div class="chart-container">
+        <h3>Employment Chart</h3>
+        <canvas id="employmentChart"></canvas>
+    </div>
+    
+    <script>
+        console.log('Script starting...');
+        
+        async function testChart() {
+            const statusDiv = document.getElementById('status');
+            
+            try {
+                // Test 1: Check if canvas element exists
+                const canvas = document.getElementById('employmentChart');
+                console.log('Canvas element:', canvas);
+                if (!canvas) {
+                    statusDiv.innerHTML = '❌ Canvas element not found!';
+                    return;
+                }
+                statusDiv.innerHTML = '✅ Canvas element found';
+                
+                // Test 2: Get context
+                const ctx = canvas.getContext('2d');
+                console.log('Context:', ctx);
+                if (!ctx) {
+                    statusDiv.innerHTML = '❌ Could not get canvas context!';
+                    return;
+                }
+                statusDiv.innerHTML += '<br>✅ Canvas context obtained';
+                
+                // Test 3: Fetch data from API
+                statusDiv.innerHTML += '<br>🔄 Fetching data from API...';
+                const response = await fetch('http://localhost:8000/api/employment?start_year=2019&end_year=2025');
+                console.log('Response:', response);
+                
+                if (!response.ok) {
+                    statusDiv.innerHTML += '<br>❌ API request failed: ' + response.status;
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Data received:', data);
+                statusDiv.innerHTML += '<br>✅ Data received (' + (data.series ? data.series.length : 0) + ' records)';
+                
+                if (!data.series || data.series.length === 0) {
+                    statusDiv.innerHTML += '<br>❌ No data in response';
+                    return;
+                }
+                
+                // Test 4: Prepare chart data
+                const years = data.series.map(d => d.year);
+                const unemployment = data.series.map(d => d.unemployment_rate);
+                const employment = data.series.map(d => d.employment_rate);
+                
+                console.log('Years:', years);
+                console.log('Unemployment:', unemployment);
+                console.log('Employment:', employment);
+                
+                statusDiv.innerHTML += '<br>✅ Data prepared for chart';
+                
+                // Test 5: Create chart
+                statusDiv.innerHTML += '<br>🔄 Creating chart...';
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: years,
+                        datasets: [
+                            {
+                                label: 'Unemployment Rate (%)',
+                                data: unemployment,
+                                borderColor: '#4fd1c5',
+                                backgroundColor: 'rgba(79, 209, 197, 0.15)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.35
+                            },
+                            {
+                                label: 'Employment Rate (%)',
+                                data: employment,
+                                borderColor: '#60a5fa',
+                                backgroundColor: 'rgba(96, 165, 250, 0.08)',
+                                borderWidth: 2,
+                                fill: false,
+                                tension: 0.35
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 2.5,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f5f5f5' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#cbd5f5' },
+                                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                            },
+                            y: {
+                                ticks: { color: '#cbd5f5' },
+                                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                            }
+                        }
+                    }
+                });
+                
+                console.log('Chart created:', chart);
+                statusDiv.innerHTML += '<br>✅ Chart created successfully!';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML += '<br>❌ Error: ' + error.message;
+                statusDiv.innerHTML += '<br>Check browser console for details.';
+            }
+        }
+        
+        // Run test when page loads
+        document.addEventListener('DOMContentLoaded', testChart);
+    </script>
+</body>
+</html>
