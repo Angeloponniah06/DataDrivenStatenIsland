@@ -1,0 +1,54 @@
+<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Staten Island outline shape in dark blue -->
+  <path d="M 120 150 
+           C 150 130, 200 120, 250 140
+           C 300 160, 350 180, 400 190
+           C 450 200, 500 205, 550 200
+           C 600 195, 650 180, 680 160
+           C 710 140, 730 110, 750 80
+           L 770 90
+           C 775 120, 780 160, 770 200
+           C 760 240, 740 280, 710 310
+           C 680 340, 650 360, 620 380
+           C 590 400, 560 420, 540 450
+           C 520 480, 510 520, 520 560
+           C 530 600, 550 630, 580 650
+           C 610 670, 640 680, 670 690
+           L 680 710
+           C 650 720, 610 720, 570 710
+           C 530 700, 490 680, 450 650
+           C 410 620, 380 580, 360 540
+           C 340 500, 330 460, 320 420
+           L 300 430
+           C 270 440, 240 440, 210 430
+           C 180 420, 150 400, 130 370
+           C 110 340, 100 300, 100 260
+           C 100 220, 105 180, 115 150
+           Z" 
+        fill="#1e4a66" stroke="none"/>
+  
+  <!-- Inner water/coastline detail -->
+  <path d="M 200 200 Q 250 220, 280 250 T 320 300" 
+        stroke="#2d5f7a" stroke-width="3" fill="none" opacity="0.5"/>
+  
+  <!-- Growth arrow in light blue -->
+  <g transform="translate(350, 250)">
+    <!-- Arrow shaft -->
+    <path d="M 0 200 L 0 -50" 
+          stroke="#5fc3e4" stroke-width="45" stroke-linecap="round"/>
+    
+    <!-- Arrow head -->
+    <path d="M -100 0 L 0 -150 L 100 0 L 70 0 L 0 -100 L -70 0 Z" 
+          fill="#5fc3e4"/>
+    
+    <!-- Growth line segments -->
+    <path d="M -20 180 L 40 120 L 100 80" 
+          stroke="#5fc3e4" stroke-width="35" stroke-linecap="round" 
+          stroke-linejoin="round" fill="none"/>
+  </g>
+  
+  <!-- Small detail points around the coastline -->
+  <circle cx="180" cy="350" r="8" fill="#2d5f7a" opacity="0.6"/>
+  <circle cx="320" cy="450" r="8" fill="#2d5f7a" opacity="0.6"/>
+  <circle cx="520" cy="600" r="8" fill="#2d5f7a" opacity="0.6"/>
+</svg>
