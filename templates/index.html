@@ -773,19 +773,19 @@
         <div class="stats-subtitle">Key metrics that show the economic landscape of our borough</div>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">475K+</div>
+                <div class="stat-number" id="stat-residents">475K+</div>
                 <div class="stat-label">Residents</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">8,500+</div>
+                <div class="stat-number" id="stat-businesses">8,500+</div>
                 <div class="stat-label">Small Businesses</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">15K+</div>
+                <div class="stat-number" id="stat-students">15K+</div>
                 <div class="stat-label">CSI Students</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">$68K</div>
+                <div class="stat-number" id="stat-income">$68K</div>
                 <div class="stat-label">Median Household Income</div>
             </div>
         </div>
@@ -876,6 +876,44 @@
         }
         setActiveSlide(next);
     }, 8000);
+
+    // Fetch and display key statistics
+    async function loadKeyStats() {
+        try {
+            const response = await fetch('/api/key-stats');
+            if (!response.ok) {
+                throw new Error('Failed to fetch stats');
+            }
+            const stats = await response.json();
+            
+            // Update stat cards with fetched data
+            const residentsEl = document.getElementById('stat-residents');
+            const businessesEl = document.getElementById('stat-businesses');
+            const studentsEl = document.getElementById('stat-students');
+            const incomeEl = document.getElementById('stat-income');
+            
+            if (residentsEl && stats.residents) {
+                residentsEl.textContent = stats.residents.formatted;
+            }
+            if (businessesEl && stats.small_businesses) {
+                businessesEl.textContent = stats.small_businesses.formatted;
+            }
+            if (studentsEl && stats.csi_students) {
+                studentsEl.textContent = stats.csi_students.formatted;
+            }
+            if (incomeEl && stats.median_income) {
+                incomeEl.textContent = stats.median_income.formatted;
+            }
+            
+            console.log('Key stats loaded successfully:', stats);
+        } catch (error) {
+            console.error('Error loading key stats:', error);
+            // Keep default values if fetch fails
+        }
+    }
+
+    // Load stats when page loads
+    document.addEventListener('DOMContentLoaded', loadKeyStats);
 </script>
 
 <footer>
