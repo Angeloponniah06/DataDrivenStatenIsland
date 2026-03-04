@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Apply – Data Driven Staten Island</title>
+    <title>Post a Job – Data Driven Staten Island</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -38,89 +38,137 @@
             padding: 30px 60px 60px;
         }
         .page-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         .page-subtitle {
-            font-size: 13px;
+            font-size: 14px;
             opacity: 0.85;
-            margin-bottom: 18px;
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
 
-        .form-card {
+        .form-container {
+            max-width: 800px;
+        }
+
+        .form-section {
             background: #020617;
             border-radius: 16px;
-            padding: 22px 24px;
+            padding: 24px 28px;
             box-shadow: 0 16px 40px rgba(0,0,0,0.55);
             border: 1px solid rgba(148, 163, 184, 0.25);
-            max-width: 720px;
+            margin-bottom: 20px;
         }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #38bdf8;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-bottom: 20px;
+        }
+
         .field-row {
             display: flex;
             gap: 16px;
         }
         .field {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             flex: 1;
+        }
+        .field-full {
+            margin-bottom: 16px;
+            width: 100%;
         }
         label {
             display: block;
-            font-size: 12px;
-            margin-bottom: 4px;
-            opacity: 0.9;
+            font-size: 13px;
+            margin-bottom: 6px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        .required {
+            color: #f87171;
         }
         input[type="text"],
         input[type="email"],
-        input[type="file"],
+        input[type="number"],
+        input[type="date"],
         select,
         textarea {
             width: 100%;
-            padding: 8px 10px;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border-radius: 8px;
             border: 1px solid #4b5563;
-            background: #020617;
+            background: #0b1220;
             color: #f9fafb;
-            font-size: 13px;
+            font-size: 14px;
             box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #38bdf8;
         }
         textarea {
-            min-height: 80px;
+            min-height: 100px;
             resize: vertical;
-        }
-        input::file-selector-button {
-            background: #1d9bf0;
-            border: none;
-            padding: 6px 12px;
-            margin-right: 10px;
-            border-radius: 999px;
-            color: #020617;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        input::file-selector-button:hover {
-            background: #38bdf8;
+            font-family: Arial, sans-serif;
         }
         .helper {
             font-size: 11px;
             opacity: 0.7;
-            margin-top: 2px;
+            margin-top: 4px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
         }
 
         .actions {
-            margin-top: 18px;
+            margin-top: 24px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         .btn-primary {
             background: #1d9bf0;
             border-radius: 999px;
-            padding: 9px 22px;
-            font-size: 13px;
+            padding: 12px 28px;
+            font-size: 14px;
             font-weight: 600;
             border: none;
             color: #0b1120;
             cursor: pointer;
+            transition: background 0.2s;
         }
         .btn-primary:hover {
             background: #38bdf8;
@@ -128,11 +176,12 @@
         .btn-ghost {
             background: transparent;
             border-radius: 999px;
-            padding: 9px 20px;
-            font-size: 13px;
+            padding: 12px 24px;
+            font-size: 14px;
             border: 1px solid #6b7280;
             color: #e5e7eb;
             cursor: pointer;
+            transition: background 0.2s;
         }
         .btn-ghost:hover {
             background: rgba(15, 23, 42, 0.7);
@@ -142,6 +191,10 @@
             font-size: 11px;
             opacity: 0.75;
             margin-top: 12px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #38bdf8;
         }
 
         footer {
@@ -237,78 +290,206 @@
 </header>
 
 <main>
-    <div class="page-title">Application form</div>
+    <div class="page-title">Post a Job Opportunity</div>
     <div class="page-subtitle">
-        Submit a demo application for:
-        <strong>
-            {% if job_id == "bay-street-coffee" %}
-                Bay Street Coffee – Part‑Time Barista
-            {% elif job_id == "island-tech-repair" %}
-                Island Tech Repair – IT &amp; Analytics Intern
-            {% elif job_id == "youth-council" %}
-                Staten Island Youth Council – Program Assistant
-            {% else %}
-                a Staten Island opportunity
-            {% endif %}
-        </strong>
+        Share your Staten Island job, internship, or volunteer opportunity with the community. 
+        Your posting will be visible to CSI students, local job seekers, and community members.
     </div>
 
-    <div class="form-card">
-        <div class="field-row">
+    <div class="form-container">
+        <!-- Company Information -->
+        <div class="form-section">
+            <div class="section-title">Company Information</div>
+            <div class="section-subtitle">Tell us about your organization</div>
+
             <div class="field">
-                <label for="full_name">Full name</label>
-                <input id="full_name" type="text" placeholder="First and last name">
+                <label for="company_name">Company or Organization Name <span class="required">*</span></label>
+                <input id="company_name" type="text" placeholder="e.g., Bay Street Coffee" required>
             </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="industry">Industry</label>
+                    <select id="industry">
+                        <option value="">Select industry</option>
+                        <option>Food & Beverage</option>
+                        <option>Retail</option>
+                        <option>Technology</option>
+                        <option>Healthcare</option>
+                        <option>Education</option>
+                        <option>Nonprofit</option>
+                        <option>Government</option>
+                        <option>Professional Services</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="company_size">Company Size</label>
+                    <select id="company_size">
+                        <option value="">Select size</option>
+                        <option>1-10 employees</option>
+                        <option>11-50 employees</option>
+                        <option>51-200 employees</option>
+                        <option>201-500 employees</option>
+                        <option>500+ employees</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Details -->
+        <div class="form-section">
+            <div class="section-title">Job Details</div>
+            <div class="section-subtitle">Provide the key details about this position</div>
+
             <div class="field">
-                <label for="email">Email address</label>
-                <input id="email" type="email" placeholder="you@example.com">
+                <label for="job_title">Job Title <span class="required">*</span></label>
+                <input id="job_title" type="text" placeholder="e.g., Part-Time Barista" required>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="job_type">Job Type <span class="required">*</span></label>
+                    <select id="job_type" required>
+                        <option value="">Select type</option>
+                        <option>Full-time</option>
+                        <option>Part-time</option>
+                        <option>Internship</option>
+                        <option>Contract</option>
+                        <option>Volunteer</option>
+                        <option>Temporary</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="workplace_type">Workplace Type</label>
+                    <select id="workplace_type">
+                        <option>On-site</option>
+                        <option>Remote</option>
+                        <option>Hybrid</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="location">Location <span class="required">*</span></label>
+                    <input id="location" type="text" placeholder="e.g., St. George, Staten Island" required>
+                </div>
+                <div class="field">
+                    <label for="experience_level">Experience Level</label>
+                    <select id="experience_level">
+                        <option>Entry level</option>
+                        <option>Mid level</option>
+                        <option>Senior level</option>
+                        <option>No experience needed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="salary_min">Salary Range (optional)</label>
+                    <input id="salary_min" type="text" placeholder="e.g., $18/hour or $45,000/year">
+                </div>
+                <div class="field">
+                    <label for="deadline">Application Deadline</label>
+                    <input id="deadline" type="date">
+                </div>
             </div>
         </div>
 
-        <div class="field-row">
-            <div class="field">
-                <label for="phone">Phone number</label>
-                <input id="phone" type="text" placeholder="(555) 555‑5555">
+        <!-- Job Description -->
+        <div class="form-section">
+            <div class="section-title">Job Description</div>
+            <div class="section-subtitle">Describe the role and responsibilities</div>
+
+            <div class="field-full">
+                <label for="description">Description <span class="required">*</span></label>
+                <textarea id="description" placeholder="Describe the role, day-to-day responsibilities, and what makes this opportunity unique..." required></textarea>
+                <div class="helper">Include key responsibilities, team structure, and company culture</div>
             </div>
-            <div class="field">
-                <label for="status">Current role / status</label>
-                <select id="status">
-                    <option>CSI undergraduate student</option>
-                    <option>CSI graduate student</option>
-                    <option>High school student</option>
-                    <option>Career‑changer / adult learner</option>
-                </select>
+
+            <div class="field-full">
+                <label for="requirements">Requirements & Qualifications</label>
+                <textarea id="requirements" placeholder="List required skills, education, certifications, or experience..."></textarea>
+                <div class="helper">Separate items with bullet points or line breaks</div>
+            </div>
+
+            <div class="field-full">
+                <label for="benefits">Benefits & Perks</label>
+                <textarea id="benefits" placeholder="e.g., Flexible schedule, employee discount, professional development, etc."></textarea>
             </div>
         </div>
 
-        <div class="field">
-            <label for="resume">Upload resume (demo)</label>
-            <input id="resume" type="file">
-            <div class="helper">In this prototype, files are not actually stored; this field demonstrates the real workflow.</div>
+        <!-- Ideal Candidate -->
+        <div class="form-section">
+            <div class="section-title">Ideal Candidate</div>
+            <div class="section-subtitle">Who would be a great fit for this role?</div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="csi_students" checked>
+                    <label for="csi_students">CSI Students</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="recent_grads">
+                    <label for="recent_grads">Recent Graduates</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="career_changers">
+                    <label for="career_changers">Career Changers</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="veterans">
+                    <label for="veterans">Veterans</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="all_welcome">
+                    <label for="all_welcome">All Welcome</label>
+                </div>
+            </div>
         </div>
 
-        <div class="field">
-            <label for="q1">Why are you interested in this opportunity?</label>
-            <textarea id="q1" placeholder="Briefly describe your interest and any relevant experience."></textarea>
+        <!-- Contact Information -->
+        <div class="form-section">
+            <div class="section-title">How to Apply</div>
+            <div class="section-subtitle">Let candidates know how to reach you</div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="contact_email">Contact Email <span class="required">*</span></label>
+                    <input id="contact_email" type="email" placeholder="hiring@yourcompany.com" required>
+                </div>
+                <div class="field">
+                    <label for="contact_phone">Contact Phone (optional)</label>
+                    <input id="contact_phone" type="text" placeholder="(718) 555-0100">
+                </div>
+            </div>
+
+            <div class="field-full">
+                <label for="application_instructions">Application Instructions</label>
+                <textarea id="application_instructions" placeholder="Tell candidates how to apply (e.g., email resume, apply via website, walk-in welcome, etc.)"></textarea>
+            </div>
         </div>
 
-        <div class="field">
-            <label for="q2">What skills or coursework would you bring to this role?</label>
-            <textarea id="q2" placeholder="Mention specific classes, projects, or prior jobs."></textarea>
-        </div>
+        <!-- Submit Actions -->
+        <div class="form-section">
+            <div class="actions">
+                <button class="btn-primary" type="button" onclick="alert('Success! Your job posting has been submitted for review. You will receive a confirmation email shortly.')">
+                    Post Job
+                </button>
+                <button class="btn-ghost" type="button" onclick="window.location.href='/'">
+                    Save as Draft
+                </button>
+                <button class="btn-ghost" type="button" onclick="window.history.back()">
+                    Cancel
+                </button>
+            </div>
 
-        <div class="actions">
-            <button class="btn-primary" type="button" onclick="alert('Thank you! In the live system, this would submit your application for review.')">
-                Submit application
-            </button>
-            <button class="btn-ghost" type="button" onclick="window.history.back()">
-                Cancel
-            </button>
-        </div>
-
-        <div class="note">
-            This is a demonstration form for the capstone. In a production system, responses would be validated,
-            securely stored, and routed to business or campus partners for review.
+            <div class="note">
+                📝 <strong>Note:</strong> This is a demonstration form. In the complete system, job postings would be reviewed 
+                for quality and compliance, then published to the dashboard and shared with CSI career services and community partners.
+            </div>
         </div>
     </div>
 </main>
