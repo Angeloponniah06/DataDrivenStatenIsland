@@ -523,6 +523,13 @@ def resources():
 def apply():
     job_id = request.args.get("job", "")
     return render_template("apply.html", job_id=job_id)
+
+@app.route("/job-application")
+def job_application():
+    """Job application form for students/applicants"""
+    job_id = request.args.get("job", "")
+    return render_template("job_application.html", job_id=job_id)
+
 @app.route("/about")
 def about():
     return render_template("about.html")

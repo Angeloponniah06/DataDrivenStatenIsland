@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply for Position – Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+        }
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        nav a {
+            color: #d0e4ff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 30px 60px 60px;
+        }
+        
+        .back-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .page-subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .job-info-box {
+            background: linear-gradient(135deg, #0b1929, #051726);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        .job-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+        
+        .job-meta {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-bottom: 12px;
+        }
+        
+        .job-description {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .job-tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, 0.15);
+            color: #bbf7d0;
+            border: 1px solid rgba(34, 197, 94, 0.8);
+            margin-top: 8px;
+        }
+
+        .form-container {
+            max-width: 800px;
+        }
+
+        .form-section {
+            background: #020617;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #38bdf8;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-bottom: 20px;
+        }
+
+        .field-row {
+            display: flex;
+            gap: 16px;
+        }
+        .field {
+            margin-bottom: 16px;
+            flex: 1;
+        }
+        .field-full {
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        .required {
+            color: #f87171;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #4b5563;
+            background: #0b1220;
+            color: #f9fafb;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+        }
+        .helper {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+        }
+        
+        input[type="file"] {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
+        input[type="file"]::file-selector-button {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+        
+        input[type="file"]::file-selector-button:hover {
+            background: #1e40af;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+        .btn-primary {
+            background: #1d9bf0;
+            border-radius: 999px;
+            padding: 12px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            color: #0b1120;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #38bdf8;
+        }
+        .btn-ghost {
+            background: transparent;
+            border-radius: 999px;
+            padding: 12px 24px;
+            font-size: 14px;
+            border: 1px solid #6b7280;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-ghost:hover {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .note {
+            font-size: 11px;
+            opacity: 0.75;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #38bdf8;
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: #020617;
+            padding: 20px 60px;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .footer-brand {
+            font-weight: 600;
+        }
+        .footer-sub {
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+        .footer-links span {
+            color: #475569;
+        }
+
+        @media (max-width: 768px) {
+            header, main, footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .field-row {
+                flex-direction: column;
+            }
+            .footer-inner {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Data Driven Staten Island</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About & Data</a>
+    </nav>
+</header>
+
+<main>
+    <a href="/resources" class="back-link">← Back to Resources</a>
+    
+    <div class="page-title">Apply for Position</div>
+    <div class="page-subtitle">
+        Submit your application for this opportunity. Your information will be reviewed by the employer.
+    </div>
+
+    <!-- Job Information Box -->
+    <div class="job-info-box">
+        <div class="job-title" id="jobTitle">Bay Street Coffee – Part-Time Barista</div>
+        <div class="job-meta" id="jobMeta">St. George • 18–22 hrs/week • Evening & weekend shifts</div>
+        <div class="job-description" id="jobDescription">
+            Customer service role near the ferry terminal. Supports flexible scheduling during the semester and offers basic training in point-of-sale systems and social media updates.
+        </div>
+        <span class="job-tag" id="jobTag">Student-friendly</span>
+    </div>
+
+    <form class="form-container" id="applicationForm" method="post" enctype="multipart/form-data">
+        <!-- Personal Information -->
+        <div class="form-section">
+            <div class="section-title">Personal Information</div>
+            <div class="section-subtitle">Tell us about yourself</div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>First Name <span class="required">*</span></label>
+                    <input type="text" name="first_name" placeholder="e.g., John" required>
+                </div>
+                <div class="field">
+                    <label>Last Name <span class="required">*</span></label>
+                    <input type="text" name="last_name" placeholder="e.g., Smith" required>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" name="email" placeholder="your.email@example.com" required>
+                </div>
+                <div class="field">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" name="phone" placeholder="(123) 456-7890" required>
+                </div>
+            </div>
+
+            <div class="field-full">
+                <label>Address</label>
+                <input type="text" name="address" placeholder="Street address">
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>City</label>
+                    <input type="text" name="city" placeholder="e.g., Staten Island" value="Staten Island">
+                </div>
+                <div class="field">
+                    <label>State</label>
+                    <input type="text" name="state" placeholder="NY" value="NY">
+                </div>
+                <div class="field">
+                    <label>ZIP Code</label>
+                    <input type="text" name="zip" placeholder="10301">
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Experience -->
+        <div class="form-section">
+            <div class="section-title">Education & Experience</div>
+            <div class="section-subtitle">Share your background</div>
+
+            <div class="field-full">
+                <label>Current Education Level <span class="required">*</span></label>
+                <select name="education_level" required>
+                    <option value="">Select level</option>
+                    <option value="high-school">High School Student</option>
+                    <option value="high-school-graduate">High School Graduate</option>
+                    <option value="college-student">College Student</option>
+                    <option value="college-graduate">College Graduate</option>
+                    <option value="graduate-student">Graduate Student</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="field-full">
+                <label>School/College Name</label>
+                <input type="text" name="school_name" placeholder="e.g., College of Staten Island">
+                <div class="helper">If currently enrolled or most recent institution</div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>Major/Field of Study</label>
+                    <input type="text" name="major" placeholder="e.g., Business Administration">
+                </div>
+                <div class="field">
+                    <label>Expected Graduation Date</label>
+                    <input type="date" name="graduation_date">
+                </div>
+            </div>
+
+            <div class="field-full">
+                <label>Previous Work Experience</label>
+                <textarea name="work_experience" placeholder="Briefly describe any relevant work experience, internships, or volunteer positions..."></textarea>
+                <div class="helper">Include job titles, companies, and key responsibilities</div>
+            </div>
+
+            <div class="field-full">
+                <label>Skills</label>
+                <textarea name="skills" placeholder="List relevant skills (e.g., customer service, Microsoft Office, social media management, point-of-sale systems, etc.)"></textarea>
+            </div>
+        </div>
+
+        <!-- Availability & Preferences -->
+        <div class="form-section">
+            <div class="section-title">Availability & Preferences</div>
+            <div class="section-subtitle">Let us know when you can work</div>
+
+            <div class="field-full">
+                <label>When can you start? <span class="required">*</span></label>
+                <input type="date" name="start_date" required>
+            </div>
+
+            <div class="field-full">
+                <label>Available Days <span class="required">*</span></label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="monday" id="monday">
+                        <label for="monday">Monday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="tuesday" id="tuesday">
+                        <label for="tuesday">Tuesday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="wednesday" id="wednesday">
+                        <label for="wednesday">Wednesday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="thursday" id="thursday">
+                        <label for="thursday">Thursday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="friday" id="friday">
+                        <label for="friday">Friday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="saturday" id="saturday">
+                        <label for="saturday">Saturday</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="available_days" value="sunday" id="sunday">
+                        <label for="sunday">Sunday</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-full">
+                <label>Preferred Hours Per Week</label>
+                <select name="hours_per_week">
+                    <option value="">Select range</option>
+                    <option value="under-10">Under 10 hours</option>
+                    <option value="10-15">10-15 hours</option>
+                    <option value="15-20">15-20 hours</option>
+                    <option value="20-25">20-25 hours</option>
+                    <option value="25-30">25-30 hours</option>
+                    <option value="30-plus">30+ hours</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Application Documents -->
+        <div class="form-section">
+            <div class="section-title">Application Documents</div>
+            <div class="section-subtitle">Upload your resume and other materials</div>
+
+            <div class="field-full">
+                <label>Resume/CV <span class="required">*</span></label>
+                <div class="file-upload-wrapper">
+                    <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
+                </div>
+                <div class="helper">Accepted formats: PDF, DOC, DOCX (Max 5MB)</div>
+            </div>
+
+            <div class="field-full">
+                <label>Cover Letter (Optional)</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" name="cover_letter" accept=".pdf,.doc,.docx">
+                </div>
+                <div class="helper">Accepted formats: PDF, DOC, DOCX (Max 5MB)</div>
+            </div>
+
+            <div class="field-full">
+                <label>Why are you interested in this position?</label>
+                <textarea name="interest_statement" placeholder="Tell us why you're a great fit for this role and what excites you about this opportunity..."></textarea>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="form-section">
+            <div class="section-title">Additional Information</div>
+            <div class="section-subtitle">Optional details</div>
+
+            <div class="field-full">
+                <label>LinkedIn Profile URL</label>
+                <input type="url" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+
+            <div class="field-full">
+                <label>References</label>
+                <textarea name="references" placeholder="List 1-2 professional or academic references (name, title, relationship, contact)"></textarea>
+            </div>
+
+            <div class="field-full">
+                <label>How did you hear about this opportunity?</label>
+                <select name="referral_source">
+                    <option value="">Select source</option>
+                    <option value="csi-career-services">CSI Career Services</option>
+                    <option value="website">Data Driven Staten Island Website</option>
+                    <option value="friend">Friend or Family</option>
+                    <option value="social-media">Social Media</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="field-full">
+                <label>Additional Comments</label>
+                <textarea name="additional_comments" placeholder="Any other information you'd like to share..."></textarea>
+            </div>
+        </div>
+
+        <!-- Submit Actions -->
+        <div class="actions">
+            <button type="submit" class="btn-primary">Submit Application</button>
+            <button type="button" class="btn-ghost" onclick="window.location.href='/resources'">Cancel</button>
+        </div>
+
+        <div class="note">
+            <strong>Note:</strong> This is a demonstration application form. In a production environment, 
+            submissions would be securely stored and forwarded to the employer. Your data would be protected 
+            according to our privacy policy and applicable regulations.
+        </div>
+    </form>
+</main>
+
+<script>
+    // Populate job details based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get('job');
+
+    const jobData = {
+        'bay-street-coffee': {
+            title: 'Bay Street Coffee – Part-Time Barista',
+            meta: 'St. George • 18–22 hrs/week • Evening & weekend shifts',
+            description: 'Customer service role near the ferry terminal. Supports flexible scheduling during the semester and offers basic training in point-of-sale systems and social media updates.',
+            tag: 'Student-friendly'
+        },
+        'island-tech-repair': {
+            title: 'Island Tech Repair – IT & Analytics Intern',
+            meta: 'New Dorp • 10–15 hrs/week • Flexible schedule',
+            description: 'Assist with device intake, maintain a simple inventory database, and help prototype a lightweight reporting dashboard that summarizes weekly repairs and sales.',
+            tag: 'Information Systems'
+        },
+        'youth-council': {
+            title: 'Staten Island Youth Council – Program Assistant',
+            meta: 'Stapleton • 8–12 hrs/week • After-school hours',
+            description: 'Support outreach events, track attendance in spreadsheets, and work with staff to visualize participation trends for grant reports and board meetings.',
+            tag: 'Nonprofit'
+        }
+    };
+
+    if (jobId && jobData[jobId]) {
+        const job = jobData[jobId];
+        document.getElementById('jobTitle').textContent = job.title;
+        document.getElementById('jobMeta').textContent = job.meta;
+        document.getElementById('jobDescription').textContent = job.description;
+        document.getElementById('jobTag').textContent = job.tag;
+        document.title = `Apply: ${job.title.split('–')[0].trim()} – Data Driven Staten Island`;
+    }
+
+    // Form submission handler
+    document.getElementById('applicationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // In a real application, this would send the data to a server
+        alert('Thank you for your application! In a production environment, your application would be submitted to the employer. For this demo, no data is actually sent.');
+        
+        // Optionally redirect back to resources page
+        setTimeout(() => {
+            window.location.href = '/resources';
+        }, 2000);
+    });
+</script>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven & Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <span>•</span>
+            <a href="#">Terms of Use</a>
+            <span>•</span>
+            <a href="#">Accessibility</a>
+            <span>•</span>
+            <a href="#">Cookies Policy</a>
+            <span>•</span>
+            <a href="#">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
