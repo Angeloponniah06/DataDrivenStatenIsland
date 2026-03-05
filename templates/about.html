@@ -34,9 +34,10 @@
             color: #38bdf8;
         }
         .bridge-logo {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: auto;
             position: relative;
+            object-fit: contain;
         }
         .brand { 
             font-size: 22px; 
@@ -168,7 +169,7 @@
 <header>
     <div class="header-left">
         <a href="/" class="logo-link">
-            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Staten Island Logo" class="bridge-logo">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Data Driven Staten Island Logo" class="bridge-logo">
             <div class="brand">Data Driven Staten Island</div>
         </a>
         <a href="javascript:history.back()" class="back-btn">← Back</a>
