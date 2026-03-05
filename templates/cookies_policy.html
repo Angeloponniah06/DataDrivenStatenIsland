@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookies Policy - Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        /* Top nav bar */
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-link:hover .brand {
+            color: #38bdf8;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .back-btn {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: #38bdf8;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Main content container */
+        .content-container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .page-title {
+            font-size: 38px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            color: #38bdf8;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            color: #60a5fa;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .section p {
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        .section ul {
+            color: #cbd5e1;
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .cookie-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cookie-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .cookie-table td {
+            padding: 12px;
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
+            color: #cbd5e1;
+        }
+
+        /* Footer */
+        footer {
+            background: #020617;
+            border-top: 1px solid #1e293b;
+            padding: 30px 60px;
+            margin-top: 80px;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+        .footer-sub {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .footer-links {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="/" class="logo-link">
+            <span class="brand">Data Driven Staten Island</span>
+        </a>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About</a>
+    </nav>
+</header>
+
+<div class="content-container">
+    <h1 class="page-title">Cookies Policy</h1>
+    <p class="last-updated">Last Updated: March 4, 2026</p>
+
+    <div class="section">
+        <p>This Cookies Policy explains how Data Driven Staten Island uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are, why we use them, and your rights to control their use.</p>
+    </div>
+
+    <div class="section">
+        <h2>What Are Cookies?</h2>
+        <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. Cookies are widely used by website owners to make their websites function efficiently and to provide reporting information.</p>
+        <p>Cookies set by the website owner (in this case, Data Driven Staten Island) are called "first-party cookies." Cookies set by parties other than the website owner are called "third-party cookies." Third-party cookies enable features or functionality to be provided on or through the website.</p>
+    </div>
+
+    <div class="section">
+        <h2>Why We Use Cookies</h2>
+        <p>We use first-party and third-party cookies for several reasons:</p>
+        <ul>
+            <li><strong>Essential cookies:</strong> Required for the website to function properly</li>
+            <li><strong>Analytics cookies:</strong> Help us understand how visitors interact with our website</li>
+            <li><strong>Functional cookies:</strong> Enable enhanced functionality and personalization</li>
+            <li><strong>Performance cookies:</strong> Improve the speed and performance of our website</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Types of Cookies We Use</h2>
+        
+        <h3>Essential Cookies</h3>
+        <p>These cookies are strictly necessary for the website to function and cannot be disabled in our systems. They are usually set in response to actions you take, such as setting privacy preferences or filling in forms.</p>
+        
+        <table class="cookie-table">
+            <thead>
+                <tr>
+                    <th>Cookie Name</th>
+                    <th>Purpose</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>session_id</td>
+                    <td>Maintains your session across pages</td>
+                    <td>Session</td>
+                </tr>
+                <tr>
+                    <td>cookie_consent</td>
+                    <td>Stores your cookie preferences</td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>security_token</td>
+                    <td>Protects against security threats</td>
+                    <td>Session</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Analytics Cookies</h3>
+        <p>These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve the website's functionality.</p>
+        
+        <table class="cookie-table">
+            <thead>
+                <tr>
+                    <th>Cookie Name</th>
+                    <th>Purpose</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>_ga</td>
+                    <td>Google Analytics - distinguishes unique users</td>
+                    <td>2 years</td>
+                </tr>
+                <tr>
+                    <td>_gid</td>
+                    <td>Google Analytics - distinguishes users</td>
+                    <td>24 hours</td>
+                </tr>
+                <tr>
+                    <td>_gat</td>
+                    <td>Google Analytics - throttle request rate</td>
+                    <td>1 minute</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Functional Cookies</h3>
+        <p>These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third-party providers whose services we use.</p>
+        
+        <table class="cookie-table">
+            <thead>
+                <tr>
+                    <th>Cookie Name</th>
+                    <th>Purpose</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user_preferences</td>
+                    <td>Stores user interface preferences</td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>language</td>
+                    <td>Remembers language selection</td>
+                    <td>1 year</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Performance Cookies</h3>
+        <p>These cookies collect information about how you use our website, such as which pages you visit most often. All information collected by these cookies is aggregated and anonymous.</p>
+    </div>
+
+    <div class="section">
+        <h2>Third-Party Cookies</h2>
+        <p>In addition to our own cookies, we may use various third-party cookies to report usage statistics and deliver advertisements:</p>
+        <ul>
+            <li><strong>Google Analytics:</strong> Provides website analytics to help us improve user experience</li>
+            <li><strong>Chart.js:</strong> Powers interactive data visualizations on our website</li>
+            <li><strong>CDN Providers:</strong> Deliver content efficiently across different geographic locations</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>How to Control Cookies</h2>
+        
+        <h3>Browser Settings</h3>
+        <p>Most web browsers allow you to control cookies through their settings. You can:</p>
+        <ul>
+            <li>View cookies stored on your device</li>
+            <li>Delete all cookies or specific cookies</li>
+            <li>Block cookies from specific websites</li>
+            <li>Block all third-party cookies</li>
+            <li>Clear all cookies when you close your browser</li>
+            <li>Enable "Do Not Track" signals</li>
+        </ul>
+
+        <h3>Browser-Specific Instructions</h3>
+        <ul>
+            <li><strong>Chrome:</strong> Settings → Privacy and security → Cookies and other site data</li>
+            <li><strong>Firefox:</strong> Settings → Privacy & Security → Cookies and Site Data</li>
+            <li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data</li>
+            <li><strong>Edge:</strong> Settings → Cookies and site permissions → Cookies and site data</li>
+        </ul>
+
+        <h3>Opt-Out Tools</h3>
+        <p>You can also opt out of certain cookies using these tools:</p>
+        <ul>
+            <li><strong>Google Analytics:</strong> <a href="https://tools.google.com/dlpage/gaoptout" style="color: #38bdf8;">Google Analytics Opt-out Browser Add-on</a></li>
+            <li><strong>Network Advertising Initiative:</strong> <a href="https://optout.networkadvertising.org/" style="color: #38bdf8;">NAI Opt-out Tool</a></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Impact of Disabling Cookies</h2>
+        <p>If you choose to disable cookies, some features of our website may not function properly. Specifically:</p>
+        <ul>
+            <li>You may need to re-enter information more frequently</li>
+            <li>Certain personalization features will not work</li>
+            <li>Some interactive features may be limited</li>
+            <li>Your preferences will not be saved between visits</li>
+        </ul>
+        <p>Essential cookies cannot be disabled as they are necessary for the website to function.</p>
+    </div>
+
+    <div class="section">
+        <h2>Other Tracking Technologies</h2>
+        
+        <h3>Web Beacons</h3>
+        <p>Web beacons (also known as pixel tags or clear GIFs) are small graphic images that may be included on our website to monitor user behavior and gather statistics.</p>
+
+        <h3>Local Storage</h3>
+        <p>We may use local storage technologies (such as HTML5 local storage) to store information on your device. This helps improve website performance and user experience.</p>
+
+        <h3>Session Storage</h3>
+        <p>Session storage is similar to local storage but is cleared when you close your browser. We use it to maintain state during your browsing session.</p>
+    </div>
+
+    <div class="section">
+        <h2>Updates to This Policy</h2>
+        <p>We may update this Cookies Policy from time to time to reflect changes in technology, legislation, or our data practices. Please review this policy periodically to stay informed about how we use cookies.</p>
+    </div>
+
+    <div class="section">
+        <h2>More Information</h2>
+        <p>For more information about how we handle your personal data, please review our <a href="/privacy" style="color: #38bdf8;">Privacy Policy</a>.</p>
+        <p>If you want to learn more about cookies in general, visit <a href="https://www.allaboutcookies.org" style="color: #38bdf8;">All About Cookies</a>.</p>
+    </div>
+
+    <div class="highlight-box">
+        <h2 style="margin-top: 0;">Contact Us About Cookies</h2>
+        <p style="margin-bottom: 0;">If you have any questions about our use of cookies or this policy, please contact us at:</p>
+        <p style="margin-bottom: 0;"><strong>Email:</strong> privacy@datadrivenstatenisland.org</p>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven & Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy">Privacy</a>
+            <span>•</span>
+            <a href="/terms">Terms of Use</a>
+            <span>•</span>
+            <a href="/accessibility">Accessibility</a>
+            <span>•</span>
+            <a href="/cookies-policy">Cookies Policy</a>
+            <span>•</span>
+            <a href="/regulatory-disclosure">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -533,6 +533,27 @@ def job_application():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/accessibility")
+def accessibility():
+    return render_template("accessibility.html")
+
+@app.route("/cookies-policy")
+def cookies_policy():
+    return render_template("cookies_policy.html")
+
+@app.route("/regulatory-disclosure")
+def regulatory_disclosure():
+    return render_template("regulatory_disclosure.html")
+
 @app.route("/api/employment")
 def api_employment():
     """
