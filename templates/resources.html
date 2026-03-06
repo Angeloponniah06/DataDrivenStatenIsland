@@ -286,7 +286,9 @@
                 align-items: flex-start;
                 gap: 10px;
             }
-            .brand { font-size: 18px; }
+            .brand { 
+                font-size: 18px; 
+            }
             nav {
                 display: flex;
                 flex-wrap: wrap;
@@ -296,8 +298,49 @@
                 margin-left: 0;
                 font-size: 12px;
             }
-            main { padding: 20px 16px 32px; }
-            .page-title { font-size: 24px; }
+            main { 
+                padding: 20px 16px 32px; 
+            }
+            .page-title { 
+                font-size: 24px; 
+            }
+            .page-subtitle {
+                font-size: 14px;
+            }
+            .section-header h2 {
+                font-size: 22px;
+            }
+            .program-card {
+                padding: 20px;
+            }
+            .program-image {
+                height: 180px;
+            }
+            .program-title {
+                font-size: 18px;
+            }
+            .program-badge {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+            .program-description {
+                font-size: 13px;
+            }
+            .program-cta {
+                font-size: 13px;
+            }
+            .job-card {
+                padding: 16px;
+            }
+            .job-title {
+                font-size: 16px;
+            }
+            .job-company {
+                font-size: 12px;
+            }
+            .job-description {
+                font-size: 13px;
+            }
         }
 
         footer {
@@ -337,6 +380,26 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 6px;
+            }
+            .footer-links {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 640px) {
+            footer {
+                padding: 20px 16px;
+            }
+            .footer-inner {
+                padding: 14px 0;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            .footer-links span {
+                display: none;
             }
         }
     </style>

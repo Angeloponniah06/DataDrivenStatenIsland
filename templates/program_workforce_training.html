@@ -289,13 +289,106 @@
 
         @media (max-width: 960px) {
             .courses-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             .hero-section {
                 padding: 60px 30px;
             }
             .content-container {
                 padding: 0 30px;
+            }
+            header {
+                padding: 16px 30px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .brand {
+                font-size: 18px;
+            }
+            nav {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            nav a {
+                font-size: 13px;
+            }
+            .hero-section {
+                padding: 40px 20px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            .badge {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .content-container {
+                padding: 0 16px;
+                margin: 30px auto;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .course-card {
+                padding: 20px;
+            }
+            .course-icon {
+                font-size: 28px;
+                width: 50px;
+                height: 50px;
+            }
+            .course-header h3 {
+                font-size: 18px;
+            }
+            .course-meta {
+                font-size: 12px;
+            }
+            .course-topics li {
+                font-size: 13px;
+            }
+            .course-price {
+                font-size: 20px;
+            }
+            .enroll-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            .info-section {
+                padding: 30px 20px;
+            }
+            .info-section h2 {
+                font-size: 24px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .info-box h3 {
+                font-size: 18px;
+            }
+            footer {
+                padding: 24px 16px;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
             }
         }
     </style>
