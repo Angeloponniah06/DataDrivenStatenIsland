@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workforce Training & Certification Hub - Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-link:hover .brand {
+            color: #38bdf8;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(5, 23, 38, 0.95), rgba(11, 40, 69, 0.95)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=400&fit=crop') center/cover;
+            padding: 80px 60px;
+            text-align: center;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 60px;
+        }
+
+        .intro-section {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .intro-section h2 {
+            color: #38bdf8;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .intro-section p {
+            color: #cbd5e1;
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .course-card {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .course-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+        }
+
+        .course-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .course-card h3 {
+            color: #38bdf8;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+
+        .course-description {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .course-topics {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        .course-topics li {
+            font-size: 13px;
+            color: #cbd5e1;
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .course-topics li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #38bdf8;
+        }
+
+        .enroll-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 12px;
+        }
+
+        .enroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+        }
+
+        .info-section {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163,184, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+
+        .info-section h2 {
+            color: #38bdf8;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .info-section p {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .info-section ul {
+            color: #cbd5e1;
+            margin-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: #020617;
+            border-top: 1px solid #1e293b;
+            padding: 30px 60px;
+            margin-top: 80px;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+        .footer-sub {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .footer-links {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 960px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section {
+                padding: 60px 30px;
+            }
+            .content-container {
+                padding: 0 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="/" class="logo-link">
+            <span class="brand">Data Driven Staten Island</span>
+        </a>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About</a>
+    </nav>
+</header>
+
+<div class="hero-section">
+    <h1 class="hero-title">Workforce Training & Certification Hub</h1>
+    <p class="hero-subtitle">
+        Affordable, flexible courses designed to build job-ready skills in the fastest-growing sectors of Staten Island's economy
+    </p>
+    <div class="badge-row">
+        <span class="badge">💼 Career Development</span>
+        <span class="badge">📜 Industry Certifications</span>
+        <span class="badge">🎓 Flexible Learning</span>
+        <span class="badge">📊 Data-Aligned</span>
+    </div>
+</div>
+
+<div class="content-container">
+    <div class="intro-section">
+        <h2>Skill Up for Staten Island's Job Market</h2>
+        <p>Our courses are strategically designed based on actual employment data from Staten Island. We focus on the skills that local employers need most, giving you a competitive edge in the job market. Whether you're starting a new career, advancing in your current role, or pivoting to a new industry, we have a course for you.</p>
+    </div>
+
+    <div class="courses-grid">
+        <!-- Excel & Data Analysis -->
+        <div class="course-card">
+            <div class="course-icon">📊</div>
+            <h3>Excel & Data Analysis</h3>
+            <div class="course-meta">
+                <span>⏱️ 6 weeks</span>
+                <span>💻 Online</span>
+                <span>📅 Flexible</span>
+            </div>
+            <p class="course-description">
+                Master Microsoft Excel from basics to advanced analytics. Learn pivot tables, VLOOKUP, data visualization, and more.
+            </p>
+            <ul class="course-topics">
+                <li>Formulas and functions</li>
+                <li>Data visualization and charts</li>
+                <li>PivotTables and data analysis</li>
+                <li>Business dashboards</li>
+            </ul>
+            <a href="/apply?program=excel-training" class="enroll-btn">Enroll Now - $199</a>
+        </div>
+
+        <!-- Web Development Basics -->
+        <div class="course-card">
+            <div class="course-icon">💻</div>
+            <h3>Web Development Basics</h3>
+            <div class="course-meta">
+                <span>⏱️ 8 weeks</span>
+                <span>🏫 Hybrid</span>
+                <span>📅 Tue/Thu 6-9pm</span>
+            </div>
+            <p class="course-description">
+                Build modern, responsive websites using HTML, CSS, and JavaScript. Perfect for career changers and aspiring developers.
+            </p>
+            <ul class="course-topics">
+                <li>HTML & CSS fundamentals</li>
+                <li>JavaScript basics & interactivity</li>
+                <li>Responsive design</li>
+                <li>Portfolio project</li>
+            </ul>
+            <a href="/apply?program=web-dev" class="enroll-btn">Enroll Now - $399</a>
+        </div>
+
+        <!-- Customer Service Excellence -->
+        <div class="course-card">
+            <div class="course-icon">🤝</div>
+            <h3>Customer Service Excellence</h3>
+            <div class="course-meta">
+                <span>⏱️ 4 weeks</span>
+                <span>🏫 In-person</span>
+                <span>📅 Saturdays 10am-2pm</span>
+            </div>
+            <p class="course-description">
+                Develop professional customer service skills for retail, hospitality, and service industries. Includes conflict resolution and communication.
+            </p>
+            <ul class="course-topics">
+                <li>Communication techniques</li>
+                <li>Conflict resolution</li>
+                <li>Professionalism & etiquette</li>
+                <li>Role-playing scenarios</li>
+            </ul>
+            <a href="/apply?program=customer-service" class="enroll-btn">Enroll Now - $149</a>
+        </div>
+
+        <!-- Digital Marketing Fundamentals -->
+        <div class="course-card">
+            <div class="course-icon">📱</div>
+            <h3>Digital Marketing Fundamentals</h3>
+            <div class="course-meta">
+                <span>⏱️ 6 weeks</span>
+                <span>💻 Online</span>
+                <span>📅 Self-paced</span>
+            </div>
+            <p class="course-description">
+                Learn social media marketing, SEO basics, email campaigns, and content strategy. Ideal for small business owners and marketers.
+            </p>
+            <ul class="course-topics">
+                <li>Social media platforms & strategy</li>
+                <li>SEO and content marketing</li>
+                <li>Email marketing basics</li>
+                <li>Analytics & measurement</li>
+            </ul>
+            <a href="/apply?program=digital-marketing" class="enroll-btn">Enroll Now - $249</a>
+        </div>
+
+        <!-- Healthcare Certifications -->
+        <div class="course-card">
+            <div class="course-icon">🏥</div>
+            <h3>Healthcare Support Certifications</h3>
+            <div class="course-meta">
+                <span>⏱️ 12 weeks</span>
+                <span>🏫 Campus-based</span>
+                <span>📅 Mon/Wed 5-8pm</span>
+            </div>
+            <p class="course-description">
+                Prepare for careers in healthcare with certified medical assistant, phlebotomy, or EKG technician training.
+            </p>
+            <ul class="course-topics">
+                <li>Medical terminology</li>
+                <li>Patient care basics</li>
+                <li>Clinical procedures</li>
+                <li>Industry certification prep</li>
+            </ul>
+            <a href="/apply?program=healthcare" class="enroll-btn">Enroll Now - $599</a>
+        </div>
+
+        <!-- Project Management -->
+        <div class="course-card">
+            <div class="course-icon">📋</div>
+            <h3>Project Management Essentials</h3>
+            <div class="course-meta">
+                <span>⏱️ 6 weeks</span>
+                <span>🏫 Hybrid</span>
+                <span>📅 Flexible schedule</span>
+            </div>
+            <p class="course-description">
+                Learn project planning, scheduling, budgeting, and team leadership. Prepares you for PMP or CAPM certification.
+            </p>
+            <ul class="course-topics">
+                <li>Project lifecycle & methodologies</li>
+                <li>Scheduling & resource management</li>
+                <li>Risk & stakeholder management</li>
+                <li>Certification exam prep</li>
+            </ul>
+            <a href="/apply?program=project-mgmt" class="enroll-btn">Enroll Now - $349</a>
+        </div>
+
+        <!-- Basic Coding (Python) -->
+        <div class="course-card">
+            <div class="course-icon">🐍</div>
+            <h3>Programming with Python</h3>
+            <div class="course-meta">
+                <span>⏱️ 10 weeks</span>
+                <span>💻 Online</span>
+                <span>📅 Self-paced + Live Q&A</span>
+            </div>
+            <p class="course-description">
+                Start your programming journey with Python. Learn to code, automate tasks, and analyze data with one of the most in-demand skills.
+            </p>
+            <ul class="course-topics">
+                <li>Python basics & syntax</li>
+                <li>Data structures & algorithms</li>
+                <li>File handling & automation</li>
+                <li>Final project</li>
+            </ul>
+            <a href="/apply?program=python" class="enroll-btn">Enroll Now - $299</a>
+        </div>
+
+        <!-- Hospitality Management -->
+        <div class="course-card">
+            <div class="course-icon">🍽️</div>
+            <h3>Hospitality & Food Service Management</h3>
+            <div class="course-meta">
+                <span>⏱️ 8 weeks</span>
+                <span>🏫 In-person</span>
+                <span>📅 Evenings</span>
+            </div>
+            <p class="course-description">
+                Prepare for supervisory roles in restaurants, hotels, and event venues. Includes ServSafe Food Handler certification.
+            </p>
+            <ul class="course-topics">
+                <li>Food safety & ServSafe cert</li>
+                <li>Operations management</li>
+                <li>Customer experience</li>
+                <li>Staff training & scheduling</li>
+            </ul>
+            <a href="/apply?program=hospitality" class="enroll-btn">Enroll Now - $399</a>
+        </div>
+
+        <!-- Accounting & QuickBooks -->
+        <div class="course-card">
+            <div class="course-icon">💰</div>
+            <h3>Bookkeeping & QuickBooks</h3>
+            <div class="course-meta">
+                <span>⏱️ 6 weeks</span>
+                <span>🏫 Hybrid</span>
+                <span>📅 Weekends</span>
+            </div>
+            <p class="course-description">
+                Learn accounting fundamentals and QuickBooks software. Perfect for small business owners or aspiring bookkeepers.
+            </p>
+            <ul class="course-topics">
+                <li>Accounting principles</li>
+                <li>QuickBooks setup & use</li>
+                <li>Payroll & invoicing</li>
+                <li>Financial reporting</li>
+            </ul>
+            <a href="/apply?program=bookkeeping" class="enroll-btn">Enroll Now - $279</a>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Why Choose Our Training Hub?</h2>
+        
+        <div class="highlight-box">
+            <strong>🎯 Data-Driven Course Selection:</strong> Our courses align with the actual needs of Staten Island's job market, as shown in our economic dashboard. We track employment trends and update our offerings to match in-demand skills.
+        </div>
+
+        <h3 style="color: #60a5fa; margin-top: 24px;">Flexible Learning Options</h3>
+        <ul>
+            <li><strong>Online:</strong> Learn at your own pace from anywhere</li>
+            <li><strong>In-person:</strong> Hands-on instruction at our campus</li>
+            <li><strong>Hybrid:</strong> Combination of online and in-person</li>
+            <li><strong>Evening & Weekend:</strong> Options for working professionals</li>
+        </ul>
+
+        <h3 style="color: #60a5fa; margin-top: 24px;">Financial Support Available</h3>
+        <ul>
+            <li>Payment plans with 0% interest</li>
+            <li>Scholarships for Staten Island residents (up to 50% off)</li>
+            <li>Employer tuition reimbursement assistance</li>
+            <li>SNAP and low-income discounts</li>
+            <li>Veterans and military family discounts</li>
+        </ul>
+
+        <h3 style="color: #60a5fa; margin-top: 24px;">Career Support Services</h3>
+        <ul>
+            <li>Resume review and optimization</li>
+            <li>Job search strategies and networking</li>
+            <li>Interview preparation workshops</li>
+            <li>Connection to Staten Island employers</li>
+            <li>LinkedIn profile development</li>
+        </ul>
+
+        <h3 style="color: #60a5fa; margin-top: 24px;">Industry-Recognized Certifications</h3>
+        <p>Many of our courses prepare you for nationally recognized certifications including:</p>
+        <ul>
+            <li>Microsoft Office Specialist (MOS)</li>
+            <li>Google Analytics Certification</li>
+            <li>ServSafe Food Handler</li>
+            <li>CompTIA ITData+</li>
+            <li>Project Management Professional (PMP)</li>
+        </ul>
+
+        <div class="highlight-box" style="margin-top: 30px;">
+            <h3 style="margin-top: 0; color: #38bdf8;">Ready to Get Started?</h3>
+            <p style="margin-bottom: 16px;">Browse our courses above and click "Enroll Now" to begin your application. Have questions? Contact our training coordinator:</p>
+            <p style="margin: 0; color: #38bdf8;">
+                📧 training@datadrivenstatenisland.org<br>
+                📞 (718) 555-0167<br>
+                💬 Walk-in hours: Mon-Fri 9am-5pm at CSI Campus
+            </p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven & Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy">Privacy</a>
+            <span>•</span>
+            <a href="/terms">Terms of Use</a>
+            <span>•</span>
+            <a href="/accessibility">Accessibility</a>
+            <span>•</span>
+            <a href="/cookies-policy">Cookies Policy</a>
+            <span>•</span>
+            <a href="/regulatory-disclosure">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

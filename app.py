@@ -554,6 +554,18 @@ def cookies_policy():
 def regulatory_disclosure():
     return render_template("regulatory_disclosure.html")
 
+@app.route("/program/launch-lab")
+def program_launch_lab():
+    return render_template("program_launch_lab.html")
+
+@app.route("/program/digital-clinic")
+def program_digital_clinic():
+    return render_template("program_digital_clinic.html")
+
+@app.route("/program/workforce-training")
+def program_workforce_training():
+    return render_template("program_workforce_training.html")
+
 @app.route("/api/employment")
 def api_employment():
     """
