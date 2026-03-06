@@ -566,6 +566,18 @@ def program_digital_clinic():
 def program_workforce_training():
     return render_template("program_workforce_training.html")
 
+@app.route("/program/mentorship-network")
+def program_mentorship_network():
+    return render_template("program_mentorship_network.html")
+
+@app.route("/program/funding-workshop")
+def program_funding_workshop():
+    return render_template("program_funding_workshop.html")
+
+@app.route("/program/food-incubator")
+def program_food_incubator():
+    return render_template("program_food_incubator.html")
+
 @app.route("/api/employment")
 def api_employment():
     """

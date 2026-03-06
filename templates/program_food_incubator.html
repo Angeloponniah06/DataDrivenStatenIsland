@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Business Incubator - Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            width: 100%;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-link:hover .brand {
+            color: #38bdf8;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(5, 23, 38, 0.95), rgba(11, 40, 69, 0.95)), 
+                        url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200&h=400&fit=crop') center/cover;
+            padding: 80px 60px;
+            text-align: center;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 60px;
+            width: 100%;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .content-grid > * {
+            min-width: 0;
+        }
+
+        .main-content {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section h2 {
+            font-size: 26px;
+            color: #38bdf8;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            color: #60a5fa;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .section p {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .section ul {
+            color: #cbd5e1;
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            max-width: 100%;
+        }
+
+        .info-card {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .info-card h3 {
+            color: #38bdf8;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .info-item:last-of-type {
+            border-bottom: none;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            word-wrap: break-word;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: #e0f2fe;
+            font-weight: 500;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .apply-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            border: none;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .icon-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .icon-list li {
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .icon-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        footer {
+            background: #020617;
+            border-top: 1px solid #1e293b;
+            padding: 30px 60px;
+            margin-top: 80px;
+            width: 100%;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+        .footer-sub {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .footer-links {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 960px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .sidebar {
+                position: static;
+                top: auto;
+                max-width: 100%;
+            }
+            .hero-section {
+                padding: 60px 30px;
+            }
+            .content-container {
+                padding: 0 30px;
+                margin: 40px auto;
+            }
+            header {
+                padding: 16px 30px;
+            }
+            .main-content {
+                padding: 30px 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .brand {
+                font-size: 18px;
+            }
+            nav {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            nav a {
+                font-size: 13px;
+            }
+            .hero-section {
+                padding: 40px 20px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            .badge {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .content-container {
+                padding: 0 16px;
+                margin: 30px auto;
+                width: 100%;
+            }
+            .content-grid {
+                gap: 20px;
+            }
+            .main-content {
+                padding: 24px 20px;
+            }
+            .section h2 {
+                font-size: 22px;
+            }
+            .section h3 {
+                font-size: 18px;
+            }
+            .section p {
+                font-size: 15px;
+            }
+            .section ul {
+                font-size: 14px;
+            }
+            .info-card {
+                padding: 20px;
+                margin-bottom: 16px;
+            }
+            .info-card h3 {
+                font-size: 16px;
+            }
+            .info-item {
+                margin-bottom: 14px;
+                padding-bottom: 14px;
+            }
+            .info-item:last-of-type {
+                margin-bottom: 16px;
+            }
+            .info-label {
+                font-size: 11px;
+            }
+            .info-value {
+                font-size: 14px;
+            }
+            .apply-btn {
+                padding: 14px 20px;
+                font-size: 16px;
+                margin-top: 0;
+            }
+            footer {
+                padding: 24px 16px;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="/" class="logo-link">
+            <span class="brand">Data Driven Staten Island</span>
+        </a>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About</a>
+    </nav>
+</header>
+
+<div class="hero-section">
+    <h1 class="hero-title">Food Business Incubator</h1>
+    <p class="hero-subtitle">
+        Commercial kitchen access, food safety training, and business support for aspiring food entrepreneurs. Perfect for food trucks, catering services, and specialty food products.
+    </p>
+    <div class="badge-row">
+        <span class="badge">🍽️ Food Industry</span>
+        <span class="badge">🏢 Commercial Kitchen</span>
+        <span class="badge">📜 Certifications</span>
+        <span class="badge">💼 Business Support</span>
+    </div>
+</div>
+
+<div class="content-container">
+    <div class="content-grid">
+        <div class="main-content">
+            <div class="section">
+                <h2>About the Incubator</h2>
+                <p>The Food Business Incubator provides aspiring food entrepreneurs with the facilities, knowledge, and support needed to launch a successful food business on Staten Island. Our program addresses the biggest barriers to entry: access to licensed commercial kitchen space, food safety certifications, and business guidance specific to the food industry.</p>
+                <p>Whether you're launching a food truck, starting a catering business, or producing specialty products for retail, our 6-month incubator program gives you the resources and mentorship to turn your culinary passion into a thriving business.</p>
+            </div>
+
+            <div class="section">
+                <h2>What's Included</h2>
+                
+                <h3>Commercial Kitchen Access</h3>
+                <ul class="icon-list">
+                    <li>Fully licensed and equipped commercial kitchen facility</li>
+                    <li>Flexible scheduling with day, evening, and weekend slots</li>
+                    <li>Professional-grade equipment: ovens, stoves, mixers, prep stations</li>
+                    <li>Refrigeration and dry storage space</li>
+                    <li>Shared access to packaging and labeling equipment</li>
+                </ul>
+
+                <h3>Training & Certifications</h3>
+                <ul class="icon-list">
+                    <li>NYC Food Protection Certificate prep course and exam</li>
+                    <li>ServSafe Manager certification training</li>
+                    <li>Allergen awareness and proper food labeling</li>
+                    <li>HACCP principles and food safety protocols</li>
+                    <li>Kitchen sanitation and equipment maintenance</li>
+                </ul>
+
+                <h3>Business Development</h3>
+                <ul class="icon-list">
+                    <li>One-on-one business planning and strategy sessions</li>
+                    <li>Food costing, recipe scaling, and pricing guidance</li>
+                    <li>Marketing, branding, and social media for food businesses</li>
+                    <li>NYC health department permits and inspection preparation</li>
+                    <li>Supplier sourcing and vendor relationship building</li>
+                    <li>Sales channels: farmers markets, retail, wholesale, online</li>
+                </ul>
+
+                <h3>Networking & Mentorship</h3>
+                <ul class="icon-list">
+                    <li>Monthly cohort meetings and peer learning sessions</li>
+                    <li>Mentorship from successful food business owners</li>
+                    <li>Connections to food distributors, retailers, and event organizers</li>
+                    <li>Participation in local food festivals and farmers markets</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Ideal For These Food Businesses</h2>
+                <ul>
+                    <li><strong>Food Trucks & Carts:</strong> Prep work and production when you're not on the road</li>
+                    <li><strong>Catering Services:</strong> Kitchen space for events and advance preparation</li>
+                    <li><strong>Specialty Foods:</strong> Sauces, baked goods, prepared meals for retail sale</li>
+                    <li><strong>Meal Prep Services:</strong> Bulk cooking and packaging for delivery or pickup</li>
+                    <li><strong>Pop-Up Concepts:</strong> Test and refine recipes before opening a restaurant</li>
+                    <li><strong>Artisan Products:</strong> Small-batch jams, sauces, baked goods, confections</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Program Timeline</h2>
+                
+                <h3>Month 1: Foundation</h3>
+                <ul class="icon-list">
+                    <li>Complete food safety certifications</li>
+                    <li>Orient to kitchen facilities and equipment</li>
+                    <li>Finalize business concept and target market</li>
+                    <li>Begin permit and licensing process</li>
+                </ul>
+
+                <h3>Months 2-3: Development</h3>
+                <ul class="icon-list">
+                    <li>Recipe testing and standardization</li>
+                    <li>Food costing and menu pricing</li>
+                    <li>Branding, packaging, and marketing materials</li>
+                    <li>Identify sales channels and distribution strategy</li>
+                </ul>
+
+                <h3>Months 4-5: Launch Preparation</h3>
+                <ul class="icon-list">
+                    <li>Ramp up production and build inventory</li>
+                    <li>Secure initial customers or retail partners</li>
+                    <li>Soft launch at farmers markets or events</li>
+                    <li>Gather customer feedback and refine offerings</li>
+                </ul>
+
+                <h3>Month 6: Launch & Transition</h3>
+                <ul class="icon-list">
+                    <li>Official business launch</li>
+                    <li>Graduate showcase event with local food industry</li>
+                    <li>Transition plan for continued kitchen access (if needed)</li>
+                    <li>Connect with ongoing support resources</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Who Should Apply</h2>
+                <p>This program is designed for:</p>
+                <ul>
+                    <li>Aspiring food entrepreneurs with a clear business concept</li>
+                    <li>Home cooks ready to commercialize their recipes</li>
+                    <li>Culinary school graduates looking to start their own business</li>
+                    <li>Existing food businesses needing compliant kitchen space</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Commitment Required:</strong> This is an intensive program. We're looking for serious entrepreneurs ready to dedicate significant time to building their business over 6 months.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Graduate Success Stories</h2>
+                <p><strong>Island Spice Kitchen</strong> - Launched Caribbean catering business through the incubator, now operates a food truck and supplies three local restaurants with signature hot sauces.</p>
+                <p><strong>Sweet Starts Bakery</strong> - Developed wholesale cookie and pastry business, now distributed in 15 cafes and specialty shops across Staten Island and Brooklyn.</p>
+                <p><strong>Fresh Meal Prep SI</strong> - Built healthy meal prep delivery service from the ground up, now serving 200+ weekly customers with plans to open a storefront.</p>
+            </div>
+
+            <div class="section">
+                <h2>After the Incubator</h2>
+                <p>Graduates can:</p>
+                <ul>
+                    <li>Continue renting kitchen time on an hourly or monthly basis</li>
+                    <li>Join our food business alumni network for ongoing support</li>
+                    <li>Access additional business development workshops</li>
+                    <li>Participate in Staten Island food events and markets</li>
+                    <li>Mentor future incubator cohorts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="info-card">
+                <h3>Program Details</h3>
+                
+                <div class="info-item">
+                    <div class="info-label">Duration</div>
+                    <div class="info-value">6 Months</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Kitchen Hours</div>
+                    <div class="info-value">Up to 40 hours/month<br><small style="color: #94a3b8;">(Flexible scheduling)</small></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Cohort Size</div>
+                    <div class="info-value">10-12 businesses per cohort</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">Fresh Start Kitchen<br>1450 Forest Ave, Staten Island</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Cost</div>
+                    <div class="info-value">$500/month<br><small style="color: #94a3b8;">(Scholarships available)</small></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Next Cohort Starts</div>
+                    <div class="info-value">May 1, 2026</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Application Deadline</div>
+                    <div class="info-value">April 10, 2026</div>
+                </div>
+
+                <a href="/apply?program=food-incubator" class="apply-btn">Apply for Incubator</a>
+            </div>
+
+            <div class="info-card">
+                <h3>Questions?</h3>
+                <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
+                    Contact our food incubator program manager
+                </p>
+                <p style="font-size: 14px; color: #38bdf8; margin: 0;">
+                    📧 foodincubator@datadrivenstatenisland.org<br>
+                    📞 (718) 555-0189
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven & Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy">Privacy</a>
+            <span>•</span>
+            <a href="/terms">Terms of Use</a>
+            <span>•</span>
+            <a href="/accessibility">Accessibility</a>
+            <span>•</span>
+            <a href="/cookies-policy">Cookies Policy</a>
+            <span>•</span>
+            <a href="/regulatory-disclosure">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

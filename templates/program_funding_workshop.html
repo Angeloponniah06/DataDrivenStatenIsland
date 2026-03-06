@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Small Business Funding & Grants Workshop - Data Driven Staten Island</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #060b16;
+            color: #f5f5f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #051726, #0b2845);
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            width: 100%;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-link:hover .brand {
+            color: #38bdf8;
+        }
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(5, 23, 38, 0.95), rgba(11, 40, 69, 0.95)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=400&fit=crop') center/cover;
+            padding: 80px 60px;
+            text-align: center;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 60px;
+            width: 100%;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .content-grid > * {
+            min-width: 0;
+        }
+
+        .main-content {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section h2 {
+            font-size: 26px;
+            color: #38bdf8;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            color: #60a5fa;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .section p {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .section ul {
+            color: #cbd5e1;
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            max-width: 100%;
+        }
+
+        .info-card {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .info-card h3 {
+            color: #38bdf8;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .info-item:last-of-type {
+            border-bottom: none;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            word-wrap: break-word;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: #e0f2fe;
+            font-weight: 500;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .apply-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            border: none;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .icon-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .icon-list li {
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .icon-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        footer {
+            background: #020617;
+            border-top: 1px solid #1e293b;
+            padding: 30px 60px;
+            margin-top: 80px;
+            width: 100%;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+        .footer-sub {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .footer-links {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 960px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .sidebar {
+                position: static;
+                top: auto;
+                max-width: 100%;
+            }
+            .hero-section {
+                padding: 60px 30px;
+            }
+            .content-container {
+                padding: 0 30px;
+                margin: 40px auto;
+            }
+            header {
+                padding: 16px 30px;
+            }
+            .main-content {
+                padding: 30px 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .brand {
+                font-size: 18px;
+            }
+            nav {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            nav a {
+                font-size: 13px;
+            }
+            .hero-section {
+                padding: 40px 20px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            .badge {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .content-container {
+                padding: 0 16px;
+                margin: 30px auto;
+                width: 100%;
+            }
+            .content-grid {
+                gap: 20px;
+            }
+            .main-content {
+                padding: 24px 20px;
+            }
+            .section h2 {
+                font-size: 22px;
+            }
+            .section h3 {
+                font-size: 18px;
+            }
+            .section p {
+                font-size: 15px;
+            }
+            .section ul {
+                font-size: 14px;
+            }
+            .info-card {
+                padding: 20px;
+                margin-bottom: 16px;
+            }
+            .info-card h3 {
+                font-size: 16px;
+            }
+            .info-item {
+                margin-bottom: 14px;
+                padding-bottom: 14px;
+            }
+            .info-item:last-of-type {
+                margin-bottom: 16px;
+            }
+            .info-label {
+                font-size: 11px;
+            }
+            .info-value {
+                font-size: 14px;
+            }
+            .apply-btn {
+                padding: 14px 20px;
+                font-size: 16px;
+                margin-top: 0;
+            }
+            footer {
+                padding: 24px 16px;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="/" class="logo-link">
+            <span class="brand">Data Driven Staten Island</span>
+        </a>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/resources">Resources</a>
+        <a href="/about">About</a>
+    </nav>
+</header>
+
+<div class="hero-section">
+    <h1 class="hero-title">Small Business Funding & Grants Workshop</h1>
+    <p class="hero-subtitle">
+        Learn about SBA loans, microloans, crowdfunding, and grant opportunities for Staten Island businesses. Get help with applications and connect with local lenders and funding organizations.
+    </p>
+    <div class="badge-row">
+        <span class="badge">💰 Financing</span>
+        <span class="badge">📋 Application Support</span>
+        <span class="badge">🤝 Lender Connections</span>
+        <span class="badge">💼 Grant Opportunities</span>
+    </div>
+</div>
+
+<div class="content-container">
+    <div class="content-grid">
+        <div class="main-content">
+            <div class="section">
+                <h2>About the Workshop</h2>
+                <p>Securing funding is one of the biggest challenges for small business owners. Our quarterly Funding & Grants Workshop demystifies the financing process and connects Staten Island entrepreneurs with resources, programs, and people who can help.</p>
+                <p>Whether you're looking for startup capital, working capital for growth, or grant funding for specific initiatives, this workshop provides practical knowledge and direct connections to funding sources.</p>
+            </div>
+
+            <div class="section">
+                <h2>What You'll Learn</h2>
+                
+                <h3>Understanding Funding Options</h3>
+                <ul class="icon-list">
+                    <li>Overview of SBA 7(a) and 504 loan programs</li>
+                    <li>Microloans for businesses needing smaller amounts</li>
+                    <li>Equipment financing and lines of credit</li>
+                    <li>Crowdfunding platforms and strategies</li>
+                    <li>Angel investors and venture capital basics</li>
+                    <li>Friends and family funding considerations</li>
+                </ul>
+
+                <h3>Grant Opportunities</h3>
+                <ul class="icon-list">
+                    <li>NYC small business grants and relief programs</li>
+                    <li>Industry-specific grants (retail, food, tech, nonprofit)</li>
+                    <li>Minority-owned and women-owned business grants</li>
+                    <li>Green business and sustainability grants</li>
+                    <li>Community development and neighborhood improvement grants</li>
+                </ul>
+
+                <h3>Preparing Your Application</h3>
+                <ul class="icon-list">
+                    <li>Building a strong business plan and financial projections</li>
+                    <li>Understanding credit scores and financial statements</li>
+                    <li>Personal guarantee and collateral requirements</li>
+                    <li>Documentation needed for different funding sources</li>
+                    <li>Common application mistakes and how to avoid them</li>
+                </ul>
+
+                <h3>Navigating the Process</h3>
+                <ul class="icon-list">
+                    <li>Typical timeline from application to funding</li>
+                    <li>Working with loan officers and underwriters</li>
+                    <li>Negotiating terms and understanding agreements</li>
+                    <li>Managing debt and building business credit</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Workshop Format</h2>
+                <p>Each 3-hour workshop includes:</p>
+                <ul>
+                    <li><strong>Expert Presentations:</strong> Hear from SBA representatives, local lenders, and grant administrators</li>
+                    <li><strong>Panel Discussion:</strong> Business owners share their funding journeys and lessons learned</li>
+                    <li><strong>Breakout Sessions:</strong> Small group discussions by funding type or business stage</li>
+                    <li><strong>One-on-One Consultations:</strong> 15-minute sessions with lenders and advisors (sign up at the workshop)</li>
+                    <li><strong>Resource Fair:</strong> Meet representatives from funding organizations and support programs</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Who Should Attend</h2>
+                <p>This workshop is valuable for:</p>
+                <ul>
+                    <li>Entrepreneurs planning to start a business</li>
+                    <li>Existing business owners looking to expand or renovate</li>
+                    <li>Business owners facing cash flow challenges</li>
+                    <li>Anyone interested in understanding small business financing</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>No financial background required!</strong> We explain concepts in plain language and provide resources to help you at every stage of the funding process. Come with questions - we're here to help.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Featured Partners</h2>
+                <p>Representatives from these organizations regularly attend our workshops:</p>
+                <ul>
+                    <li><strong>U.S. Small Business Administration (SBA)</strong> - Federal loan and grant programs</li>
+                    <li><strong>NYC Department of Small Business Services</strong> - Local grants and incentives</li>
+                    <li><strong>Community Development Financial Institutions (CDFIs)</strong> - Mission-driven lenders</li>
+                    <li><strong>Local Banks & Credit Unions</strong> - Traditional lending options</li>
+                    <li><strong>SCORE</strong> - Free mentoring and business advising</li>
+                    <li><strong>Staten Island Chamber of Commerce</strong> - Member resources and advocacy</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Success Stories</h2>
+                <p><strong>Rosa's Bakery</strong> - Attended workshop, connected with a CDFI lender, and secured a $50,000 microloan to purchase commercial ovens and expand production capacity.</p>
+                <p><strong>Island Construction Services</strong> - Learned about equipment financing at the workshop and financed new vehicles and tools, improving efficiency and client reach.</p>
+                <p><strong>Tech Start SI</strong> - Discovered a minority-owned business grant program and received $25,000 for marketing and hiring their first employee.</p>
+            </div>
+
+            <div class="section">
+                <h2>Before You Attend</h2>
+                <p>To make the most of your time at the workshop, consider bringing:</p>
+                <ul>
+                    <li>Your business plan or concept description</li>
+                    <li>Recent financial statements (if business is operating)</li>
+                    <li>Questions about specific funding needs</li>
+                    <li>Notebook for taking notes</li>
+                    <li>Business cards for networking</li>
+                </ul>
+                <p><em>Note: You don't need to have these materials to attend - everyone is welcome!</em></p>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="info-card">
+                <h3>Workshop Details</h3>
+                
+                <div class="info-item">
+                    <div class="info-label">Frequency</div>
+                    <div class="info-value">Quarterly</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Duration</div>
+                    <div class="info-value">3 hours<br>9:00 AM - 12:00 PM</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Format</div>
+                    <div class="info-value">In-person<br><small style="color: #94a3b8;">(Virtual option available)</small></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">Staten Island Chamber of Commerce<br>130 Bay Street</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Cost</div>
+                    <div class="info-value">FREE<br><small style="color: #94a3b8;">(Light refreshments provided)</small></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Next Workshop</div>
+                    <div class="info-value">April 19, 2026</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Registration Deadline</div>
+                    <div class="info-value">April 12, 2026</div>
+                </div>
+
+                <a href="/apply?program=funding-workshop" class="apply-btn">Register for Workshop</a>
+            </div>
+
+            <div class="info-card">
+                <h3>Questions?</h3>
+                <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
+                    Contact our funding workshop coordinator
+                </p>
+                <p style="font-size: 14px; color: #38bdf8; margin: 0;">
+                    📧 funding@datadrivenstatenisland.org<br>
+                    📞 (718) 555-0167
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-brand">2026 Data Driven & Co.</div>
+            <div class="footer-sub">All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy">Privacy</a>
+            <span>•</span>
+            <a href="/terms">Terms of Use</a>
+            <span>•</span>
+            <a href="/accessibility">Accessibility</a>
+            <span>•</span>
+            <a href="/cookies-policy">Cookies Policy</a>
+            <span>•</span>
+            <a href="/regulatory-disclosure">Regulatory Disclosure</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
