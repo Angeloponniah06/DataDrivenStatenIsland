@@ -430,7 +430,7 @@
 <div class="page-hero">
     <div class="page-hero-label">About This Platform</div>
     <h1>Data Driven Staten Island</h1>
-    <p>A community economic intelligence platform built to put real borough data in the hands of residents, small businesses, and community organizations — built as a Verrazzano Honors capstone at the College of Staten Island.</p>
+    <p>A community economic intelligence platform built to put real borough data in the hands of residents, small businesses, and community organizations built as a Verrazzano Honors student who completed their capstone at the College of Staten Island.</p>
 </div>
 
 <main>
@@ -464,7 +464,7 @@
             <div class="card">
                 <div class="card-title">🎯 What This Platform Does</div>
                 <p style="font-size:13px;color:#94a3b8;margin:10px 0 0;">
-                    Data Driven Staten Island transforms raw public economic data into clear, actionable visuals. It aggregates employment statistics, small business dynamics, transit ridership, and rental markets — all scoped specifically to Staten Island's Richmond County — so any resident or business owner can make informed decisions without needing a data science background.
+                    Data Driven Staten Island transforms raw public economic data into clear, actionable visuals. It aggregates employment statistics, small business dynamics, transit ridership, and rental markets all scoped specifically to Staten Island's Richmond County so any resident or business owner can make informed decisions without needing a data science background.
                 </p>
             </div>
             <div class="card">
@@ -489,12 +489,12 @@
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <div class="feature-title">Live Economic Dashboard</div>
-                <div class="feature-text">Interactive charts for employment rates, business openings/closures, transit ridership, and median rent — all filterable by year range.</div>
+                <div class="feature-text">Interactive charts for employment rates, business openings/closures, transit ridership, and median rent all filterable by year range.</div>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🏢</div>
                 <div class="feature-title">Community Resources</div>
-                <div class="feature-text">A directory of 6 active programs — Launch Lab, Food Incubator, Digital Clinic, Mentorship Network, Funding Workshop, and Workforce Training.</div>
+                <div class="feature-text">A directory of 6 active programs: Launch Lab, Food Incubator, Digital Clinic, Mentorship Network, Funding Workshop, and Workforce Training.</div>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">💼</div>
@@ -509,12 +509,12 @@
             <div class="feature-card">
                 <div class="feature-icon">📡</div>
                 <div class="feature-title">Real API Integrations</div>
-                <div class="feature-text">Pulls from FRED (Federal Reserve), NYC Open Data, HUD Fair Market Rent API, and MTA ridership feeds — with smart fallbacks when APIs are unavailable.</div>
+                <div class="feature-text">Pulls from FRED (Federal Reserve), NYC Open Data, HUD Fair Market Rent API, and MTA ridership feeds with smart fallbacks when APIs are unavailable.</div>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">♿</div>
                 <div class="feature-title">Accessible Design</div>
-                <div class="feature-text">Built with accessibility in mind — responsive across all screen sizes, keyboard-navigable, and compliant with WCAG contrast guidelines.</div>
+                <div class="feature-text">Built with accessibility in mind responsive across all screen sizes, keyboard-navigable, and compliant with WCAG contrast guidelines.</div>
             </div>
         </div>
     </section>
@@ -579,7 +579,7 @@
                 <ul>
                     <li>Approximate count of small businesses opening and closing per year in Staten Island</li>
                     <li>Calibrated to NYC SBS reports and NYS DOL QCEW sector data</li>
-                    <li>Exact counts not published in a single open dataset — values demonstrate dashboard behavior with real Chamber or QCEW feeds</li>
+                    <li>Exact counts not published in a single open dataset values demonstrate dashboard behavior with real Chamber or QCEW feeds</li>
                     <li>Production deployment would use automated pulls from official sources</li>
                 </ul>
             </div>
@@ -614,7 +614,7 @@
         <div class="section-divider"></div>
         <div class="card">
             <p style="font-size:14px;color:#94a3b8;margin:0 0 12px;">
-                In this prototype, data files are updated manually at least once per year using the most recent ACS and New York State Department of Labor releases. On each application startup, the system attempts live API calls to all configured endpoints — if they succeed, the database is populated with real data; if they fail, calibrated fallback data derived from official published sources is used instead.
+                In this prototype, data files are updated manually at least once per year using the most recent ACS and New York State Department of Labor releases. On each application startup, the system attempts live API calls to all configured endpoints if they succeed, the database is populated with real data; if they fail, calibrated fallback data derived from official published sources is used instead.
             </p>
             <p style="font-size:14px;color:#94a3b8;margin:0;">
                 In a future production iteration, the Flask API endpoints (<code>/api/employment</code>, <code>/api/business</code>, <code>/api/transit</code>, <code>/api/rent</code>) would connect directly to Census, NY DOL, MTA, and HUD APIs to automate monthly or annual refreshes without manual intervention.
