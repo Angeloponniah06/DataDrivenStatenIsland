@@ -524,6 +524,11 @@ def apply():
     job_id = request.args.get("job", "")
     return render_template("apply.html", job_id=job_id)
 
+@app.route("/program-application")
+def program_application():
+    program_id = request.args.get("program", "")
+    return render_template("program_application.html", program_id=program_id)
+
 @app.route("/job-application")
 def job_application():
     """Job application form for students/applicants"""
