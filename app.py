@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 
 app = Flask(__name__)
+db_initialized = False
 
 # FRED API Configuration
 FRED_API_KEY = '3cddf79d5604a832019162f50334e76a'
@@ -350,7 +351,7 @@ def init_db():
                 'observation_end': '2025-12-31'
             }
             
-            response = requests.get(FRED_BASE_URL, params=params)
+            response = requests.get(FRED_BASE_URL, params=params, timeout=30)
             response.raise_for_status()
             fred_data = response.json()
             
@@ -504,8 +505,18 @@ def init_db():
     
     conn.close()
 
-# Initialize database on startup
-init_db()
+def ensure_db_initialized():
+    """Initialize database once per process to avoid duplicate init in debug reloader."""
+    global db_initialized
+    if db_initialized:
+        return
+    init_db()
+    db_initialized = True
+
+
+@app.before_request
+def initialize_database_before_requests():
+    ensure_db_initialized()
 
 @app.route("/")
 def home():
@@ -875,7 +886,8 @@ def api_key_stats():
 
 if __name__ == "__main__":
     # For local development
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    ensure_db_initialized()
+    app.run(host='0.0.0.0', port=8000, debug=True, use_reloader=False)
     
     # For production (AWS Lightsail), use:
     # app.run(host='0.0.0.0', port=8000)
