@@ -33,44 +33,56 @@ DATABASE = 'data.db'
 
 SITE_ASSISTANT_FAQ = [
     {
-        'keywords': ['dashboard', 'charts', 'data', 'visualization'],
-        'answer': 'Visit the dashboard page to explore employment, business, transit, and rent trends. You can filter by year range and switch chart metrics.'
+        'keywords': ['about', 'purpose', 'mission', 'website'],
+        'answer': 'Data Driven Staten Island is a resource hub providing economic insights, business data, and support programs for Staten Island residents and entrepreneurs. We track employment trends, business activity, housing costs, and transit patterns to help inform decisions about work, business, and community development.'
     },
     {
-        'keywords': ['employment', 'unemployment', 'job market'],
-        'answer': 'Employment and unemployment trends are available on the dashboard and come from the employment API endpoint.'
+        'keywords': ['staten island', 'borough', 'richmond county', 'community'],
+        'answer': 'Staten Island (Richmond County) is home to about 475,000 residents and a vibrant small business community. The data on this site helps showcase economic trends, employment opportunities, and the borough\'s role in New York City\'s broader economy.'
     },
     {
-        'keywords': ['business', 'openings', 'closures', 'small businesses'],
-        'answer': 'Business insights are shown in the dashboard and include new businesses, closures, and net change over time.'
+        'keywords': ['dashboard', 'charts', 'data', 'visualization', 'trends'],
+        'answer': 'The dashboard provides interactive charts on four key areas: employment/unemployment rates, small business growth, transit ridership, and median rent. You can explore year-by-year trends and understand Staten Island\'s economic health and cost of living.'
     },
     {
-        'keywords': ['transit', 'ferry', 'bus', 'railway', 'sir'],
-        'answer': 'Transit charts on the dashboard cover Staten Island Ferry, SIR, and bus ridership patterns by year.'
+        'keywords': ['employment', 'unemployment', 'job market', 'jobs'],
+        'answer': 'Our employment dashboard shows unemployment and employment rate trends for Staten Island from 2017 onward. This data comes from the FRED economic database and helps track job market conditions and economic recovery.'
     },
     {
-        'keywords': ['rent', 'housing', 'median rent'],
-        'answer': 'Rent trends are shown in the dashboard rent section, with annual median rent values.'
+        'keywords': ['business', 'openings', 'closures', 'small businesses', 'entrepreneurs'],
+        'answer': 'The business chart tracks new business openings and closures year-over-year in Staten Island. This shows economic vitality and helps entrepreneurs understand the climate for starting or growing a business.'
     },
     {
-        'keywords': ['resources', 'programs', 'launch lab', 'digital clinic', 'workforce'],
-        'answer': 'The resources section lists available business support programs and detailed program pages.'
+        'keywords': ['transit', 'ferry', 'bus', 'railway', 'sir', 'transportation'],
+        'answer': 'Transit ridership data covers Staten Island Ferry, Staten Island Railway (SIR), express buses, and local buses. Strong transit access is linked to business success and job accessibility for residents.'
     },
     {
-        'keywords': ['apply', 'application', 'job application', 'program application'],
-        'answer': 'Use the apply and application pages to submit job or program forms. The site supports dedicated job and program application routes.'
+        'keywords': ['rent', 'housing', 'median rent', 'affordability', 'cost of living'],
+        'answer': 'Median rent trends show how housing costs have changed over time in Staten Island. While rents have risen, Staten Island remains more affordable than Manhattan and Brooklyn, offering value for residents and businesses.'
+    },
+    {
+        'keywords': ['programs', 'support', 'launch lab', 'digital clinic', 'workforce', 'mentorship', 'funding'],
+        'answer': 'We offer business support programs including the Launch Lab for startups, Digital Clinic for online presence, Workforce Training, Mentorship Network, Funding Workshop, and Food Business Incubator. Visit the resources page for details.'
+    },
+    {
+        'keywords': ['apply', 'application', 'job', 'program', 'form'],
+        'answer': 'You can apply for jobs or programs using dedicated application forms on the site. Program applications let you enroll in business support, and job applications are for specific opportunities.'
     },
     {
         'keywords': ['privacy', 'terms', 'cookies', 'accessibility', 'regulatory'],
-        'answer': 'Legal and policy pages are available in the footer: Privacy, Terms, Accessibility, Cookies Policy, and Regulatory Disclosure.'
+        'answer': 'Legal and policy pages are in the footer: Privacy Policy, Terms of Use, Accessibility Statement, Cookies Policy, and Regulatory Disclosure. We\'re committed to transparency and user privacy.'
+    },
+    {
+        'keywords': ['help', 'support', 'how', 'where', 'find'],
+        'answer': 'I can help you navigate the site, explain data and trends, suggest relevant programs, and answer questions about Staten Island\'s economy. Just ask about any topic relevant to the site!'
     }
 ]
 
 SITE_ASSISTANT_SUGGESTIONS = [
-    'Where can I see unemployment trends?',
-    'How do I apply for a program?',
-    'What does the dashboard show?',
-    'Where can I find resources?'
+    'What is this website about?',
+    'How is Staten Island\'s economy doing?',
+    'Where can I find business support programs?',
+    'What do the employment trends show?'
 ]
 
 
@@ -99,7 +111,7 @@ def build_local_assistant_answer(question, page):
     """Build a local fallback answer for site navigation and content questions."""
     cleaned_question = (question or '').strip().lower()
     if not cleaned_question:
-        return 'Ask me about navigating the site, dashboard metrics, applications, or programs, and I will point you to the right page.'
+        return 'Hi! I\'m Gelo. Ask me about Staten Island\'s economy, job trends, business support, housing costs, or how to navigate the site. What would you like to know?'
 
     scored_answers = []
     for item in SITE_ASSISTANT_FAQ:
@@ -111,7 +123,7 @@ def build_local_assistant_answer(question, page):
         scored_answers.sort(key=lambda pair: pair[0], reverse=True)
         best_answer = scored_answers[0][1]
     else:
-        best_answer = 'I can help with dashboard data, resources, applications, and where to find key pages. Try asking where a feature is located.'
+        best_answer = 'I\'m Gelo, your guide to Staten Island\'s economy and this site. Ask me about job trends, business activity, housing, transit, support programs, or how to use any feature!'
 
     if any(keyword in cleaned_question for keyword in ['employment', 'unemployment', 'job market']):
         snapshot = get_latest_employment_snapshot()
@@ -121,8 +133,8 @@ def build_local_assistant_answer(question, page):
                 f"{snapshot['unemployment_rate']}% (employment {snapshot['employment_rate']}%)."
             )
 
-    if page:
-        best_answer += f' You are currently on {page}.'
+    if page and page != '/':
+        best_answer += f' (You\'re on {page}.)'
 
     return best_answer
 
@@ -135,9 +147,11 @@ def get_openai_assistant_answer(question, page):
 
     model_name = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
     system_prompt = (
-        'You are a concise website assistant for Data Driven Staten Island. '
-        'Answer only questions about this site content, navigation, data dashboards, applications, and resources. '
-        'If asked something unrelated, politely steer back to site help.'
+        'You are Gelo, a friendly and knowledgeable assistant for Data Driven Staten Island. '
+        'You help visitors understand Staten Island\'s economy, explore data trends, learn about business support programs, '
+        'and navigate the site. Provide conversational, helpful answers about employment, business activity, transit, housing costs, '
+        'and economic trends. If asked something unrelated to the site or Staten Island, politely redirect to topics you can help with. '
+        'Always be encouraging and supportive of entrepreneurship and community development.'
     )
 
     user_prompt = f'Current page: {page or "unknown"}. User question: {question}'

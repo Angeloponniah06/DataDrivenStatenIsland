@@ -173,22 +173,22 @@
     const toggleButton = document.createElement('button');
     toggleButton.className = 'site-assistant-toggle';
     toggleButton.type = 'button';
-    toggleButton.textContent = 'Website Guide';
+    toggleButton.textContent = 'Gelo Assistant';
 
     const panel = document.createElement('section');
     panel.className = 'site-assistant-panel';
     panel.innerHTML = `
         <div class="site-assistant-header">
             <div>
-                <div class="site-assistant-title">Website Guide</div>
-                <div class="site-assistant-subtitle">Ask questions about this website</div>
+                <div class="site-assistant-title">Gelo Assistant</div>
+                <div class="site-assistant-subtitle">Your guide to Staten Island's economy & this site</div>
             </div>
             <button class="site-assistant-close" type="button" aria-label="Close assistant">×</button>
         </div>
         <div class="site-assistant-messages" id="siteAssistantMessages"></div>
         <div class="site-assistant-suggestions" id="siteAssistantSuggestions"></div>
         <div class="site-assistant-input-row">
-            <input class="site-assistant-input" id="siteAssistantInput" type="text" placeholder="Ask about pages, data, or applications..." />
+            <input class="site-assistant-input" id="siteAssistantInput" type="text" placeholder="Ask Gelo anything..." />
             <button class="site-assistant-send" id="siteAssistantSend" type="button">Send</button>
         </div>
     `;
@@ -278,11 +278,11 @@
         }
     });
 
-    addMessage('Hi — I can help you find pages, explain dashboard metrics, and guide you to applications or resources.', 'bot');
+    addMessage('Hey! I\'m Gelo. I can answer questions about Staten Island\'s economy, explain data trends, help with business support programs, or guide you through the site. What would you like to know?', 'bot');
     renderSuggestions([
-        'Where can I see unemployment trends?',
-        'How do I apply for a program?',
-        'What does the dashboard show?',
-        'Where can I find resources?'
+        'What is this website about?',
+        'How is Staten Island\'s economy doing?',
+        'Where can I find business support?',
+        'What do employment trends show?'
     ]);
 })();
