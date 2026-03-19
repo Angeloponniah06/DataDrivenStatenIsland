@@ -31,6 +31,146 @@ NYC_HOUSING_RENT_ENDPOINT = f'{NYC_OPEN_DATA_BASE}/c4dh-2s8d.json'  # NYC Housin
 # Database configuration
 DATABASE = 'data.db'
 
+SITE_ASSISTANT_FAQ = [
+    {
+        'keywords': ['dashboard', 'charts', 'data', 'visualization'],
+        'answer': 'Visit the dashboard page to explore employment, business, transit, and rent trends. You can filter by year range and switch chart metrics.'
+    },
+    {
+        'keywords': ['employment', 'unemployment', 'job market'],
+        'answer': 'Employment and unemployment trends are available on the dashboard and come from the employment API endpoint.'
+    },
+    {
+        'keywords': ['business', 'openings', 'closures', 'small businesses'],
+        'answer': 'Business insights are shown in the dashboard and include new businesses, closures, and net change over time.'
+    },
+    {
+        'keywords': ['transit', 'ferry', 'bus', 'railway', 'sir'],
+        'answer': 'Transit charts on the dashboard cover Staten Island Ferry, SIR, and bus ridership patterns by year.'
+    },
+    {
+        'keywords': ['rent', 'housing', 'median rent'],
+        'answer': 'Rent trends are shown in the dashboard rent section, with annual median rent values.'
+    },
+    {
+        'keywords': ['resources', 'programs', 'launch lab', 'digital clinic', 'workforce'],
+        'answer': 'The resources section lists available business support programs and detailed program pages.'
+    },
+    {
+        'keywords': ['apply', 'application', 'job application', 'program application'],
+        'answer': 'Use the apply and application pages to submit job or program forms. The site supports dedicated job and program application routes.'
+    },
+    {
+        'keywords': ['privacy', 'terms', 'cookies', 'accessibility', 'regulatory'],
+        'answer': 'Legal and policy pages are available in the footer: Privacy, Terms, Accessibility, Cookies Policy, and Regulatory Disclosure.'
+    }
+]
+
+SITE_ASSISTANT_SUGGESTIONS = [
+    'Where can I see unemployment trends?',
+    'How do I apply for a program?',
+    'What does the dashboard show?',
+    'Where can I find resources?'
+]
+
+
+def get_latest_employment_snapshot():
+    """Return latest employment snapshot for quick assistant answers."""
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('SELECT year, unemployment_rate, employment_rate FROM employment_data ORDER BY year DESC LIMIT 1')
+        row = cursor.fetchone()
+        conn.close()
+
+        if not row:
+            return None
+
+        return {
+            'year': row['year'],
+            'unemployment_rate': row['unemployment_rate'],
+            'employment_rate': row['employment_rate']
+        }
+    except Exception:
+        return None
+
+
+def build_local_assistant_answer(question, page):
+    """Build a local fallback answer for site navigation and content questions."""
+    cleaned_question = (question or '').strip().lower()
+    if not cleaned_question:
+        return 'Ask me about navigating the site, dashboard metrics, applications, or programs, and I will point you to the right page.'
+
+    scored_answers = []
+    for item in SITE_ASSISTANT_FAQ:
+        score = sum(1 for keyword in item['keywords'] if keyword in cleaned_question)
+        if score > 0:
+            scored_answers.append((score, item['answer']))
+
+    if scored_answers:
+        scored_answers.sort(key=lambda pair: pair[0], reverse=True)
+        best_answer = scored_answers[0][1]
+    else:
+        best_answer = 'I can help with dashboard data, resources, applications, and where to find key pages. Try asking where a feature is located.'
+
+    if any(keyword in cleaned_question for keyword in ['employment', 'unemployment', 'job market']):
+        snapshot = get_latest_employment_snapshot()
+        if snapshot:
+            best_answer += (
+                f" Latest available value: {snapshot['year']} unemployment is "
+                f"{snapshot['unemployment_rate']}% (employment {snapshot['employment_rate']}%)."
+            )
+
+    if page:
+        best_answer += f' You are currently on {page}.'
+
+    return best_answer
+
+
+def get_openai_assistant_answer(question, page):
+    """Return OpenAI-generated answer when API key is configured; otherwise None."""
+    api_key = os.getenv('OPENAI_API_KEY')
+    if not api_key:
+        return None
+
+    model_name = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
+    system_prompt = (
+        'You are a concise website assistant for Data Driven Staten Island. '
+        'Answer only questions about this site content, navigation, data dashboards, applications, and resources. '
+        'If asked something unrelated, politely steer back to site help.'
+    )
+
+    user_prompt = f'Current page: {page or "unknown"}. User question: {question}'
+
+    try:
+        response = requests.post(
+            'https://api.openai.com/v1/chat/completions',
+            headers={
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'model': model_name,
+                'messages': [
+                    {'role': 'system', 'content': system_prompt},
+                    {'role': 'user', 'content': user_prompt}
+                ],
+                'temperature': 0.3,
+                'max_tokens': 220
+            },
+            timeout=30
+        )
+        response.raise_for_status()
+        payload = response.json()
+        choices = payload.get('choices', [])
+        if not choices:
+            return None
+        content = choices[0].get('message', {}).get('content', '').strip()
+        return content or None
+    except Exception as error:
+        print(f'Site assistant OpenAI fallback triggered: {error}')
+        return None
+
 def get_db():
     """Create a database connection"""
     conn = sqlite3.connect(DATABASE)
@@ -518,6 +658,30 @@ def ensure_db_initialized():
 def initialize_database_before_requests():
     ensure_db_initialized()
 
+
+@app.after_request
+def inject_site_assistant_widget(response):
+    """Inject site assistant script on HTML pages so it appears across the site."""
+    try:
+        if request.path.startswith('/api/'):
+            return response
+
+        if response.mimetype != 'text/html':
+            return response
+
+        html = response.get_data(as_text=True)
+        if '/static/js/site_assistant.js' in html:
+            return response
+
+        injection = '\n<script src="/static/js/site_assistant.js" defer></script>\n'
+        if '</body>' in html:
+            html = html.replace('</body>', f'{injection}</body>')
+            response.set_data(html)
+    except Exception as error:
+        print(f'Site assistant injection skipped: {error}')
+
+    return response
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -883,6 +1047,44 @@ def api_key_stats():
             'median_income': {'value': 68000, 'formatted': '$68K', 'label': 'Median Household Income'},
             'error': str(e)
         })
+
+
+@app.route('/api/site-assistant', methods=['POST'])
+def api_site_assistant():
+    """Website assistant endpoint for visitor Q&A about this site."""
+    try:
+        payload = request.get_json(silent=True) or {}
+        question = str(payload.get('question', '')).strip()
+        page = str(payload.get('page', '')).strip()
+
+        if not question:
+            return jsonify({
+                'answer': 'Please type a question about the website and I can help you find the right page or data section.',
+                'source': 'local_faq',
+                'suggestions': SITE_ASSISTANT_SUGGESTIONS
+            }), 200
+
+        openai_answer = get_openai_assistant_answer(question, page)
+        if openai_answer:
+            return jsonify({
+                'answer': openai_answer,
+                'source': 'openai',
+                'suggestions': SITE_ASSISTANT_SUGGESTIONS
+            }), 200
+
+        local_answer = build_local_assistant_answer(question, page)
+        return jsonify({
+            'answer': local_answer,
+            'source': 'local_faq',
+            'suggestions': SITE_ASSISTANT_SUGGESTIONS
+        }), 200
+    except Exception as error:
+        return jsonify({
+            'answer': 'I ran into a temporary issue, but I can still help you find pages like Dashboard, Resources, or Application forms.',
+            'source': 'fallback',
+            'error': str(error),
+            'suggestions': SITE_ASSISTANT_SUGGESTIONS
+        }), 200
 
 if __name__ == "__main__":
     # For local development
