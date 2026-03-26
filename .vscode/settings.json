@@ -1,0 +1,7 @@
+{
+  "workbench.editorAssociations": {
+    "*.db": "sqlite3-editor.editor",
+    "*.sqlite": "sqlite3-editor.editor",
+    "*.sqlite3": "sqlite3-editor.editor"
+  }
+}
