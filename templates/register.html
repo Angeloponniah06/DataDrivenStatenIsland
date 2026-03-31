@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Data Driven Staten Island</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #020617;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: #0b1221;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        h1 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: 26px;
+        }
+        .subtitle {
+            margin: 0 0 18px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+        input, select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            background: #020617;
+            color: #e2e8f0;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            color: #f8fafc;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .error {
+            background: #450a0a;
+            color: #fecaca;
+            border: 1px solid #7f1d1d;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        .links {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        a {
+            color: #7dd3fc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Create Account</h1>
+        <p class="subtitle">Register as an applicant or employer. Credentials are saved in the database.</p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/register">
+            <label for="role">Account Type</label>
+            <select id="role" name="role" required>
+                <option value="applicant" {% if role == 'applicant' %}selected{% endif %}>Applicant</option>
+                <option value="employer" {% if role == 'employer' %}selected{% endif %}>Employer</option>
+            </select>
+
+            <label for="full_name">Full Name</label>
+            <input id="full_name" name="full_name" type="text" required>
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+
+            <label for="password">Password (minimum 8 characters)</label>
+            <input id="password" name="password" type="password" minlength="8" required>
+
+            <button class="btn" type="submit">Create Account</button>
+        </form>
+
+        <div class="links">
+            Already registered? <a href="/login">Log in</a><br>
+            Back to <a href="/">Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Records - Data Driven Staten Island</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #020617;
+            color: #e2e8f0;
+        }
+        header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .actions a {
+            color: #7dd3fc;
+            margin-left: 12px;
+            text-decoration: none;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 16px;
+        }
+        .section {
+            margin-bottom: 24px;
+            background: #0b1221;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            overflow: auto;
+        }
+        .section h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+        th, td {
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            padding: 8px;
+            font-size: 13px;
+        }
+        th {
+            color: #bae6fd;
+            background: #0f172a;
+        }
+        .empty {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 6px 0;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Database Records</h1>
+    <div class="actions">
+        Logged in as {{ current_user.full_name }} ({{ current_user.role }})
+        <a href="/resources">Resources</a>
+        <a href="/logout">Log out</a>
+    </div>
+</header>
+
+<main>
+    <div class="section">
+        <h2>Registered Accounts</h2>
+        {% if users %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Last Login</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.role }}</td>
+                    <td>{{ u.created_at }}</td>
+                    <td>{{ u.last_login_at or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty">No user accounts yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Employer Job Posts</h2>
+        {% if job_posts %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Employer</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Location</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in job_posts %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.employer_name }}</td>
+                    <td>{{ p.employer_email }}</td>
+                    <td>{{ p.company_name }}</td>
+                    <td>{{ p.job_title }}</td>
+                    <td>{{ p.location }}</td>
+                    <td>{{ p.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty">No job posts saved yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Applicant Job Applications</h2>
+        {% if job_apps %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Account Name</th>
+                    <th>Applicant Name</th>
+                    <th>Email</th>
+                    <th>Job ID</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in job_apps %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.account_name }}</td>
+                    <td>{{ a.first_name }} {{ a.last_name }}</td>
+                    <td>{{ a.email }}</td>
+                    <td>{{ a.job_id or '-' }}</td>
+                    <td>{{ a.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty">No job applications saved yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Applicant Program Applications</h2>
+        {% if program_apps %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Account Name</th>
+                    <th>Applicant Name</th>
+                    <th>Email</th>
+                    <th>Program ID</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in program_apps %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.account_name }}</td>
+                    <td>{{ a.first_name }} {{ a.last_name }}</td>
+                    <td>{{ a.email }}</td>
+                    <td>{{ a.program_id or '-' }}</td>
+                    <td>{{ a.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty">No program applications saved yet.</p>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>

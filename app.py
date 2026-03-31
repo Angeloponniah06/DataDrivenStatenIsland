@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import json
 import os
 import sqlite3
 import requests
+from functools import wraps
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'change-this-secret-key-in-production')
 db_initialized = False
 
 # FRED API Configuration
@@ -190,6 +193,39 @@ def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row  # This enables column access by name
     return conn
+
+
+def current_user():
+    """Return currently logged-in user from session."""
+    user_id = session.get('user_id')
+    role = session.get('user_role')
+    full_name = session.get('user_name')
+    if not user_id or not role:
+        return None
+
+    return {
+        'id': user_id,
+        'role': role,
+        'full_name': full_name,
+        'email': session.get('user_email')
+    }
+
+
+def login_required(required_role=None):
+    """Protect routes and optionally enforce a specific role."""
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapped(*args, **kwargs):
+            user = current_user()
+            if not user:
+                return redirect(url_for('login', next=request.path))
+
+            if required_role and user['role'] != required_role:
+                return redirect(url_for('login', next=request.path, role=required_role, error='role_required'))
+
+            return view_func(*args, **kwargs)
+        return wrapped
+    return decorator
 
 def fetch_nyc_business_data():
     """
@@ -440,6 +476,98 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             year INTEGER NOT NULL,
             median_rent INTEGER NOT NULL
+        )
+    ''')
+
+    # Create user accounts for applicants and employers
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user_accounts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            role TEXT NOT NULL CHECK(role IN ('applicant', 'employer')),
+            created_at TEXT NOT NULL,
+            last_login_at TEXT
+        )
+    ''')
+
+    # Create employer job postings
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS employer_job_posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            employer_user_id INTEGER NOT NULL,
+            company_name TEXT NOT NULL,
+            industry TEXT,
+            company_size TEXT,
+            job_title TEXT NOT NULL,
+            job_type TEXT NOT NULL,
+            workplace_type TEXT,
+            location TEXT NOT NULL,
+            experience_level TEXT,
+            salary_min TEXT,
+            deadline TEXT,
+            description TEXT NOT NULL,
+            requirements TEXT,
+            benefits TEXT,
+            candidate_types TEXT,
+            contact_email TEXT NOT NULL,
+            contact_phone TEXT,
+            application_instructions TEXT,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (employer_user_id) REFERENCES user_accounts(id)
+        )
+    ''')
+
+    # Create applicant job applications
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS applicant_job_applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            applicant_user_id INTEGER NOT NULL,
+            job_id TEXT,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            city TEXT,
+            state TEXT,
+            zip_code TEXT,
+            education_level TEXT,
+            school_name TEXT,
+            major TEXT,
+            graduation_date TEXT,
+            work_experience TEXT,
+            skills TEXT,
+            start_date TEXT,
+            available_days TEXT,
+            hours_per_week TEXT,
+            interest_statement TEXT,
+            linkedin TEXT,
+            references_text TEXT,
+            referral_source TEXT,
+            additional_comments TEXT,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (applicant_user_id) REFERENCES user_accounts(id)
+        )
+    ''')
+
+    # Create applicant program applications
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS applicant_program_applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            applicant_user_id INTEGER NOT NULL,
+            program_id TEXT,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            borough TEXT,
+            status TEXT,
+            goals TEXT NOT NULL,
+            experience TEXT,
+            availability TEXT,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (applicant_user_id) REFERENCES user_accounts(id)
         )
     ''')
     
@@ -708,21 +836,299 @@ def dashboard():
 def resources():
     return render_template("resources.html")
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    error = request.args.get('error', '')
+
+    if request.method == 'POST':
+        full_name = request.form.get('full_name', '').strip()
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '')
+        role = request.form.get('role', 'applicant')
+
+        if role not in ('applicant', 'employer'):
+            error = 'Please select a valid account type.'
+        elif not full_name or not email or not password:
+            error = 'All fields are required.'
+        elif len(password) < 8:
+            error = 'Password must be at least 8 characters.'
+        else:
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute('SELECT id FROM user_accounts WHERE email = ?', (email,))
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                conn.close()
+                error = 'That email is already registered. Please log in.'
+            else:
+                now = datetime.utcnow().isoformat()
+                cursor.execute('''
+                    INSERT INTO user_accounts (full_name, email, password_hash, role, created_at)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (full_name, email, generate_password_hash(password), role, now))
+                conn.commit()
+                user_id = cursor.lastrowid
+                conn.close()
+
+                session['user_id'] = user_id
+                session['user_role'] = role
+                session['user_name'] = full_name
+                session['user_email'] = email
+
+                if role == 'employer':
+                    return redirect(url_for('apply'))
+                return redirect(url_for('resources'))
+
+    return render_template('register.html', error=error, role=request.args.get('role', 'applicant'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = request.args.get('error', '')
+    next_page = request.args.get('next', '/resources')
+
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '')
+        requested_role = request.form.get('role', '').strip()
+        next_page = request.form.get('next', '/resources')
+
+        if not email or not password:
+            error = 'Email and password are required.'
+        else:
+            conn = get_db()
+            cursor = conn.cursor()
+
+            if requested_role in ('applicant', 'employer'):
+                cursor.execute('SELECT * FROM user_accounts WHERE email = ? AND role = ?', (email, requested_role))
+            else:
+                cursor.execute('SELECT * FROM user_accounts WHERE email = ?', (email,))
+
+            user = cursor.fetchone()
+
+            if not user or not check_password_hash(user['password_hash'], password):
+                conn.close()
+                error = 'Invalid login credentials.'
+            else:
+                now = datetime.utcnow().isoformat()
+                cursor.execute('UPDATE user_accounts SET last_login_at = ? WHERE id = ?', (now, user['id']))
+                conn.commit()
+                conn.close()
+
+                session['user_id'] = user['id']
+                session['user_role'] = user['role']
+                session['user_name'] = user['full_name']
+                session['user_email'] = user['email']
+
+                if not next_page.startswith('/'):
+                    next_page = '/resources'
+                return redirect(next_page)
+
+    return render_template('login.html', error=error, next_page=next_page, role=request.args.get('role', ''))
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
+
+
+@app.route('/database-records')
+@login_required()
+def database_records():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT id, full_name, email, role, created_at, last_login_at
+        FROM user_accounts
+        ORDER BY created_at DESC
+    ''')
+    users = [dict(row) for row in cursor.fetchall()]
+
+    cursor.execute('''
+        SELECT p.id, p.company_name, p.job_title, p.location, p.created_at, u.full_name AS employer_name, u.email AS employer_email
+        FROM employer_job_posts p
+        JOIN user_accounts u ON p.employer_user_id = u.id
+        ORDER BY p.created_at DESC
+    ''')
+    job_posts = [dict(row) for row in cursor.fetchall()]
+
+    cursor.execute('''
+        SELECT a.id, a.job_id, a.first_name, a.last_name, a.email, a.created_at, u.full_name AS account_name
+        FROM applicant_job_applications a
+        JOIN user_accounts u ON a.applicant_user_id = u.id
+        ORDER BY a.created_at DESC
+    ''')
+    job_apps = [dict(row) for row in cursor.fetchall()]
+
+    cursor.execute('''
+        SELECT a.id, a.program_id, a.first_name, a.last_name, a.email, a.created_at, u.full_name AS account_name
+        FROM applicant_program_applications a
+        JOIN user_accounts u ON a.applicant_user_id = u.id
+        ORDER BY a.created_at DESC
+    ''')
+    program_apps = [dict(row) for row in cursor.fetchall()]
+
+    conn.close()
+
+    return render_template(
+        'database_records.html',
+        current_user=current_user(),
+        users=users,
+        job_posts=job_posts,
+        job_apps=job_apps,
+        program_apps=program_apps
+    )
+
+
+@app.route('/api/job-posts', methods=['POST'])
+@login_required('employer')
+def create_job_post():
+    payload = request.get_json(silent=True) or {}
+
+    required = ['company_name', 'job_title', 'job_type', 'location', 'description', 'contact_email']
+    missing = [field for field in required if not str(payload.get(field, '')).strip()]
+
+    if missing:
+        return jsonify({'error': f"Missing required fields: {', '.join(missing)}"}), 400
+
+    candidate_types = payload.get('candidate_types', [])
+    if isinstance(candidate_types, list):
+        candidate_types = ', '.join(candidate_types)
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO employer_job_posts (
+            employer_user_id, company_name, industry, company_size, job_title, job_type, workplace_type,
+            location, experience_level, salary_min, deadline, description, requirements, benefits,
+            candidate_types, contact_email, contact_phone, application_instructions, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        session['user_id'],
+        payload.get('company_name', '').strip(),
+        payload.get('industry', '').strip(),
+        payload.get('company_size', '').strip(),
+        payload.get('job_title', '').strip(),
+        payload.get('job_type', '').strip(),
+        payload.get('workplace_type', '').strip(),
+        payload.get('location', '').strip(),
+        payload.get('experience_level', '').strip(),
+        payload.get('salary_min', '').strip(),
+        payload.get('deadline', '').strip(),
+        payload.get('description', '').strip(),
+        payload.get('requirements', '').strip(),
+        payload.get('benefits', '').strip(),
+        candidate_types,
+        payload.get('contact_email', '').strip(),
+        payload.get('contact_phone', '').strip(),
+        payload.get('application_instructions', '').strip(),
+        datetime.utcnow().isoformat()
+    ))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'ok': True, 'message': 'Job posting saved to database.'})
+
+
 @app.route("/apply")
+@login_required('employer')
 def apply():
     job_id = request.args.get("job", "")
-    return render_template("apply.html", job_id=job_id)
+    return render_template("apply.html", job_id=job_id, current_user=current_user())
 
-@app.route("/program-application")
+@app.route("/program-application", methods=['GET', 'POST'])
+@login_required('applicant')
 def program_application():
     program_id = request.args.get("program", "")
-    return render_template("program_application.html", program_id=program_id)
+    if request.method == 'POST':
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO applicant_program_applications (
+                applicant_user_id, program_id, first_name, last_name, email, phone,
+                borough, status, goals, experience, availability, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            session['user_id'],
+            program_id,
+            request.form.get('first_name', '').strip(),
+            request.form.get('last_name', '').strip(),
+            request.form.get('email', '').strip(),
+            request.form.get('phone', '').strip(),
+            request.form.get('borough', '').strip(),
+            request.form.get('status', '').strip(),
+            request.form.get('goals', '').strip(),
+            request.form.get('experience', '').strip(),
+            request.form.get('availability', '').strip(),
+            datetime.utcnow().isoformat()
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('program_application', program=program_id, submitted='1'))
 
-@app.route("/job-application")
+    return render_template(
+        "program_application.html",
+        program_id=program_id,
+        submitted=request.args.get('submitted', ''),
+        current_user=current_user()
+    )
+
+@app.route("/job-application", methods=['GET', 'POST'])
+@login_required('applicant')
 def job_application():
     """Job application form for students/applicants"""
     job_id = request.args.get("job", "")
-    return render_template("job_application.html", job_id=job_id)
+    if request.method == 'POST':
+        available_days = request.form.getlist('available_days')
+
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO applicant_job_applications (
+                applicant_user_id, job_id, first_name, last_name, email, phone, city, state, zip_code,
+                education_level, school_name, major, graduation_date, work_experience, skills,
+                start_date, available_days, hours_per_week, interest_statement, linkedin,
+                references_text, referral_source, additional_comments, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            session['user_id'],
+            job_id,
+            request.form.get('first_name', '').strip(),
+            request.form.get('last_name', '').strip(),
+            request.form.get('email', '').strip(),
+            request.form.get('phone', '').strip(),
+            request.form.get('city', '').strip(),
+            request.form.get('state', '').strip(),
+            request.form.get('zip', '').strip(),
+            request.form.get('education_level', '').strip(),
+            request.form.get('school_name', '').strip(),
+            request.form.get('major', '').strip(),
+            request.form.get('graduation_date', '').strip(),
+            request.form.get('work_experience', '').strip(),
+            request.form.get('skills', '').strip(),
+            request.form.get('start_date', '').strip(),
+            ', '.join(available_days),
+            request.form.get('hours_per_week', '').strip(),
+            request.form.get('interest_statement', '').strip(),
+            request.form.get('linkedin', '').strip(),
+            request.form.get('references', '').strip(),
+            request.form.get('referral_source', '').strip(),
+            request.form.get('additional_comments', '').strip(),
+            datetime.utcnow().isoformat()
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('job_application', job=job_id, submitted='1'))
+
+    return render_template(
+        "job_application.html",
+        job_id=job_id,
+        submitted=request.args.get('submitted', ''),
+        current_user=current_user()
+    )
 
 @app.route("/about")
 def about():

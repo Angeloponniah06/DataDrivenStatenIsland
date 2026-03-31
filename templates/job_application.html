@@ -388,6 +388,19 @@
 
 <main>
     <a href="/resources" class="back-link">← Back to Resources</a>
+
+    {% if current_user %}
+    <div class="note" style="margin-bottom: 14px;">
+        Logged in as {{ current_user.full_name }} ({{ current_user.role }})
+        <a href="/logout" style="margin-left: 10px; color: #7dd3fc;">Log out</a>
+    </div>
+    {% endif %}
+
+    {% if submitted == '1' %}
+    <div class="note" style="margin-bottom: 14px; color: #bbf7d0; border: 1px solid #14532d; background: #052e16;">
+        Your job application was saved to the database.
+    </div>
+    {% endif %}
     
     <div class="page-title">Apply for Position</div>
     <div class="page-subtitle">
@@ -404,7 +417,7 @@
         <span class="job-tag" id="jobTag">Student-friendly</span>
     </div>
 
-    <form class="form-container" id="applicationForm" method="post" enctype="multipart/form-data">
+    <form class="form-container" id="applicationForm" method="post" enctype="multipart/form-data" action="/job-application?job={{ job_id }}">
         <!-- Personal Information -->
         <div class="form-section">
             <div class="section-title">Personal Information</div>
@@ -667,18 +680,7 @@
         document.title = `Apply: ${job.title.split('–')[0].trim()} – Data Driven Staten Island`;
     }
 
-    // Form submission handler
-    document.getElementById('applicationForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // In a real application, this would send the data to a server
-        alert('Thank you for your application! In a production environment, your application would be submitted to the employer. For this demo, no data is actually sent.');
-        
-        // Optionally redirect back to resources page
-        setTimeout(() => {
-            window.location.href = '/resources';
-        }, 2000);
-    });
+    // Form now submits to the Flask backend so applications are stored in SQLite.
 </script>
 
 <footer>

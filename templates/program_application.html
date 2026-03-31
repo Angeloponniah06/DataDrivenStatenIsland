@@ -272,6 +272,19 @@
 <main>
     <a href="/resources" class="back-link">← Back to Resources</a>
 
+    {% if current_user %}
+    <div class="note" style="margin-bottom: 14px;">
+        Logged in as {{ current_user.full_name }} ({{ current_user.role }})
+        <a href="/logout" style="margin-left: 10px; color: #7dd3fc;">Log out</a>
+    </div>
+    {% endif %}
+
+    {% if submitted == '1' %}
+    <div class="note" style="margin-bottom: 14px; color: #bbf7d0; border: 1px solid #14532d; background: #052e16; padding: 12px; border-radius: 10px;">
+        Your program application was saved to the database.
+    </div>
+    {% endif %}
+
     <h1 class="page-title">Program Application</h1>
     <div class="page-subtitle">
         Apply to join a community program. This form is for program participation and training enrollment, not for posting job listings.
@@ -282,7 +295,7 @@
         <div class="program-meta" id="programMeta">Program enrollment application</div>
     </div>
 
-    <form class="form-container" id="programApplicationForm">
+    <form class="form-container" id="programApplicationForm" method="post" action="/program-application?program={{ program_id }}">
         <div class="section-title">Applicant Information</div>
 
         <div class="field-row">
@@ -403,13 +416,7 @@
         document.title = `${program.name} Application – Data Driven Staten Island`;
     }
 
-    document.getElementById('programApplicationForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        alert('Thank you. Your program application has been received and will be reviewed by the program team.');
-        setTimeout(() => {
-            window.location.href = '/resources';
-        }, 1000);
-    });
+    // Form now submits to the Flask backend so applications are stored in SQLite.
 </script>
 </body>
 </html>
