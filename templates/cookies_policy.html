@@ -210,12 +210,21 @@
             <span class="brand">Data Driven Staten Island</span>
         </a>
     </div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/resources">Resources</a>
-        <a href="/about">About</a>
-    </nav>
+    
+        {% if current_user %}
+        <a href="/database-records">{{ current_user.full_name }}</a>
+            {% if current_user %}
+            <a href="/database-records">{{ current_user.full_name }}</a>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            {% endif %}
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        {% endif %}
 </header>
 
 <div class="content-container">

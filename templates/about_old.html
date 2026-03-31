@@ -303,12 +303,21 @@
         </a>
         <a href="javascript:history.back()" class="back-btn">← Back</a>
     </div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/resources">Resources</a>
-        <a href="/about">About &amp; Data</a>
-    </nav>
+    
+        {% if current_user %}
+            {% if current_user %}
+            <a href="/database-records">{{ current_user.full_name }}</a>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            {% endif %}
+        <a href="/database-records">{{ current_user.full_name }}</a>
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        {% endif %}
 </header>
 
 <main>
