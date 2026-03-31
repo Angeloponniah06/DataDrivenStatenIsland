@@ -32,7 +32,7 @@ HUD_FMR_ENDPOINT = 'https://www.huduser.gov/hudapi/public/fmr/data'
 NYC_HOUSING_RENT_ENDPOINT = f'{NYC_OPEN_DATA_BASE}/c4dh-2s8d.json'  # NYC Housing rents
 
 # Database configuration
-DATABASE = 'data.db'
+DATABASE = os.path.join(app.root_path, 'data.db')
 
 SITE_ASSISTANT_FAQ = [
     {
@@ -209,6 +209,12 @@ def current_user():
         'full_name': full_name,
         'email': session.get('user_email')
     }
+
+
+@app.context_processor
+def inject_current_user():
+    """Make current user available in all templates."""
+    return {'current_user': current_user()}
 
 
 def login_required(required_role=None):

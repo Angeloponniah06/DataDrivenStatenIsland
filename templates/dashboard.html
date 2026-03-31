@@ -365,6 +365,13 @@
             <a href="javascript:history.back()" class="back-btn">← Back</a>
         </div>
         <nav>
+                {% if current_user %}
+                <a href="/database-records">{{ current_user.full_name }}</a>
+                <a href="/logout">Logout</a>
+                {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+                {% endif %}
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/about">About & Data</a>

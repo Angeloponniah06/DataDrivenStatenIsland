@@ -670,6 +670,13 @@
     </div>
     <nav>
         <a href="/">Home</a>
+            {% if current_user %}
+            <a href="/database-records">{{ current_user.full_name }}</a>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            {% endif %}
         <a href="/dashboard">Dashboard</a>
         <a href="/about">About & Data</a>
     </nav>

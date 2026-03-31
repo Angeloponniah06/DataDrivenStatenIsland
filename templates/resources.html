@@ -419,6 +419,13 @@
         <a href="/dashboard">Dashboard</a>
         <a href="/resources">Resources</a>
         <a href="/about">About & Data</a>
+        {% if current_user %}
+        <a href="/database-records">{{ current_user.full_name }}</a>
+        <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        {% endif %}
     </nav>
 </header>
 
