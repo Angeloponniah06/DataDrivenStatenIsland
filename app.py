@@ -941,7 +941,7 @@ def logout():
 
 
 @app.route('/database-records')
-@login_required()
+@login_required('employer')
 def database_records():
     conn = get_db()
     cursor = conn.cursor()

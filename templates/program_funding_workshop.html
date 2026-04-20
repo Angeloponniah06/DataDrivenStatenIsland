@@ -455,13 +455,13 @@
     
         {% if current_user %}
             {% if current_user %}
-            <a href="/database-records">{{ current_user.full_name }}</a>
+            <a href="/dashboard">{{ current_user.full_name }}</a>
             <a href="/logout">Logout</a>
             {% else %}
             <a href="/login">Login</a>
             <a href="/register">Register</a>
             {% endif %}
-        <a href="/database-records">{{ current_user.full_name }}</a>
+        <a href="/dashboard">{{ current_user.full_name }}</a>
         <a href="/logout">Logout</a>
         {% else %}
         <a href="/login">Login</a>

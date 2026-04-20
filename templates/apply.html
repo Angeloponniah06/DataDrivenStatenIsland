@@ -334,7 +334,7 @@
     </div>
     
         {% if current_user %}
-        <a href="/database-records">{{ current_user.full_name }}</a>
+        <a href="/dashboard">{{ current_user.full_name }}</a>
         <a href="/logout">Logout</a>
         {% else %}
         <a href="/login">Login</a>
@@ -347,7 +347,7 @@
     <div class="note" style="margin-bottom: 16px; max-width: 800px;">
         Logged in as {{ current_user.full_name }} ({{ current_user.role }})
         <a href="/logout" style="margin-left: 10px; color: #7dd3fc;">Log out</a>
-        <a href="/database-records" style="margin-left: 10px; color: #7dd3fc;">View database records</a>
+        <a href="/dashboard" style="margin-left: 10px; color: #7dd3fc;">Go to dashboard</a>
     </div>
     {% endif %}
 
@@ -621,7 +621,7 @@
             }
 
             alert('Success. Your job posting was saved to the database.');
-            window.location.href = '/database-records';
+            window.location.href = '/dashboard';
         } catch (error) {
             alert('There was a network error while saving your posting. Please try again.');
         }
