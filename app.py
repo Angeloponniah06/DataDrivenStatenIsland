@@ -188,6 +188,33 @@ def get_openai_assistant_answer(question, page):
         print(f'Site assistant OpenAI fallback triggered: {error}')
         return None
 
+
+def load_employment_fallback_series(start_year=None, end_year=None):
+    """Load employment series from local JSON fallback and apply optional year filters."""
+    data_path = os.path.join(app.root_path, "employment_data.json")
+    try:
+        with open(data_path, "r") as f:
+            payload = json.load(f)
+
+        series = []
+        for entry in payload.get('series', []):
+            year = int(entry.get('year', 0))
+            if start_year and year < start_year:
+                continue
+            if end_year and year > end_year:
+                continue
+
+            series.append({
+                'year': year,
+                'unemployment_rate': float(entry.get('unemployment_rate', 0)),
+                'employment_rate': float(entry.get('employment_rate', 0))
+            })
+
+        return series
+    except Exception as error:
+        print(f"Error loading employment JSON fallback: {error}")
+        return []
+
 def get_db():
     """Create a database connection"""
     conn = sqlite3.connect(DATABASE)
@@ -1191,13 +1218,13 @@ def api_employment():
     for Staten Island from the database.
     Supports optional query parameters: start_year, end_year
     """
+    # Get optional date range parameters
+    start_year = request.args.get('start_year', type=int)
+    end_year = request.args.get('end_year', type=int)
+
     try:
-        # Get optional date range parameters
-        start_year = request.args.get('start_year', type=int)
-        end_year = request.args.get('end_year', type=int)
-        
-        print(f"DEBUG: start_year={start_year}, end_year={end_year}")  # Debug
-        
+        ensure_db_initialized()
+
         conn = get_db()
         cursor = conn.cursor()
         
@@ -1213,15 +1240,11 @@ def api_employment():
             params.append(end_year)
         
         query += ' ORDER BY year'
-        
-        print(f"DEBUG: SQL query={query}, params={params}")  # Debug
-        
+
         cursor.execute(query, params)
         rows = cursor.fetchall()
         conn.close()
-        
-        print(f"DEBUG: Rows returned={len(rows)}")  # Debug
-        
+
         # Convert rows to list of dictionaries
         series = []
         for row in rows:
@@ -1230,16 +1253,35 @@ def api_employment():
                 'unemployment_rate': row['unemployment_rate'],
                 'employment_rate': row['employment_rate']
             })
+
+        source = 'database'
+        source_notes = 'Unemployment rates for Richmond County (Staten Island) from FRED API (NYRICH5URN). Employment rate calculated as 100 minus unemployment rate.'
+
+        # If DB has no matching rows (or no rows at all), fall back to local JSON.
+        if not series:
+            series = load_employment_fallback_series(start_year, end_year)
+            source = 'json_fallback'
+            source_notes = 'Employment data loaded from local fallback dataset when database/API data is unavailable.'
         
         # Build response similar to original JSON structure
         response_data = {
             'area': 'Staten Island (Richmond County, NY)',
             'series': series,
-            'source_notes': 'Unemployment rates for Richmond County (Staten Island) from FRED API (NYRICH5URN). Employment rate calculated as 100 minus unemployment rate.'
+            'source': source,
+            'source_notes': source_notes
         }
         
         return jsonify(response_data)
     except Exception as e:
+        fallback_series = load_employment_fallback_series(start_year, end_year)
+        if fallback_series:
+            return jsonify({
+                'area': 'Staten Island (Richmond County, NY)',
+                'series': fallback_series,
+                'source': 'json_fallback',
+                'source_notes': 'Employment data loaded from local fallback dataset due database/API error.',
+                'warning': f'Primary employment data query failed: {str(e)}'
+            })
         return jsonify({"error": str(e)}), 500
 @app.route("/api/business")
 def api_business():

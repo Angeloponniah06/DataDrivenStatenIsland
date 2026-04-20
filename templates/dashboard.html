@@ -366,7 +366,7 @@
         </div>
         <nav>
                 {% if current_user %}
-                <a href="/dashboard">{{ current_user.full_name }}</a>
+                <span class="nav-user-name" style="order: 99; margin-left: 14px; padding-left: 14px; border-left: 1px solid rgba(125, 211, 252, 0.35); color: #9ec5fe; font-weight: 600; white-space: nowrap; cursor: default; pointer-events: none;">{{ current_user.full_name }}</span>
                 <a href="/logout">Logout</a>
                 {% else %}
                 <a href="/login">Login</a>
@@ -545,14 +545,19 @@
                 if (params.toString()) url += '?' + params.toString();
 
                 const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Employment API request failed with status ${response.status}`);
+                }
                 const data = await response.json();
 
-                if (data.series && Array.isArray(data.series)) {
+                if (Array.isArray(data.series) && data.series.length > 0) {
                     data.series.forEach(point => {
                         years.push(point.year);
                         unemployment.push(point.unemployment_rate);
                         employment.push(point.employment_rate);
                     });
+                } else {
+                    throw new Error('Employment API returned no series data');
                 }
             } catch (err) {
                 console.error('Error loading employment data:', err);
