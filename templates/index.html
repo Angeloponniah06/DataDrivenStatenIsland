@@ -86,6 +86,59 @@
             color: #ffffff;
             text-decoration: underline;
         }
+        .user-menu {
+            position: relative;
+            margin-left: 14px;
+            padding-left: 14px;
+            border-left: 1px solid rgba(125, 211, 252, 0.35);
+            order: 99;
+        }
+        .user-menu summary {
+            list-style: none;
+            color: #9ec5fe;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-menu summary::-webkit-details-marker {
+            display: none;
+        }
+        .user-menu summary::after {
+            content: "\25be";
+            font-size: 11px;
+            opacity: 0.85;
+        }
+        .user-menu[open] summary::after {
+            content: "\25b4";
+        }
+        .user-menu-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 130px;
+            background: rgba(5, 23, 38, 0.98);
+            border: 1px solid rgba(125, 211, 252, 0.35);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(2, 6, 23, 0.45);
+            padding: 6px 0;
+            z-index: 30;
+        }
+        .user-menu-dropdown a {
+            display: block;
+            margin-left: 0;
+            padding: 8px 12px;
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .user-menu-dropdown a:hover {
+            background: rgba(56, 189, 248, 0.18);
+            color: #ffffff;
+            text-decoration: none;
+        }
 
         /* Hero with background image overlay */
         .hero {
@@ -514,6 +567,9 @@
                 margin-left: 16px;
                 font-size: 13px;
             }
+            .user-menu-dropdown a {
+                margin-left: 0;
+            }
             .hero {
                 height: 280px;
                 padding: 0 24px;
@@ -567,6 +623,18 @@
             nav a {
                 margin-left: 0;
                 font-size: 12px;
+            }
+            .user-menu {
+                width: 100%;
+                margin-left: 0;
+                padding-left: 0;
+                border-left: none;
+            }
+            .user-menu-dropdown {
+                position: static;
+                margin-top: 8px;
+                width: 100%;
+                box-shadow: none;
             }
             .hero {
                 height: auto;
@@ -671,8 +739,12 @@
     <nav>
         <a href="/">Home</a>
             {% if current_user %}
-            <span class="nav-user-name" style="order: 99; margin-left: 14px; padding-left: 14px; border-left: 1px solid rgba(125, 211, 252, 0.35); color: #9ec5fe; font-weight: 600; white-space: nowrap; cursor: default; pointer-events: none;">{{ current_user.full_name }}</span>
-            <a href="/logout">Logout</a>
+            <details class="user-menu">
+                <summary>{{ current_user.full_name }}</summary>
+                <div class="user-menu-dropdown">
+                    <a href="/logout">Logout</a>
+                </div>
+            </details>
             {% else %}
             <a href="/login">Login</a>
             <a href="/register">Register</a>

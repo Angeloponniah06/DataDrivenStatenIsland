@@ -911,7 +911,7 @@ def register():
 
                 if role == 'employer':
                     return redirect(url_for('apply'))
-                return redirect(url_for('resources'))
+                return redirect(url_for('home'))
 
     return render_template('register.html', error=error, role=request.args.get('role', 'applicant'))
 
@@ -919,13 +919,13 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = request.args.get('error', '')
-    next_page = request.args.get('next', '/resources')
+    next_page = request.args.get('next', '/')
 
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
         requested_role = request.form.get('role', '').strip()
-        next_page = request.form.get('next', '/resources')
+        next_page = request.form.get('next', '/')
 
         if not email or not password:
             error = 'Email and password are required.'
@@ -955,7 +955,7 @@ def login():
                 session['user_email'] = user['email']
 
                 if not next_page.startswith('/'):
-                    next_page = '/resources'
+                    next_page = '/'
                 return redirect(next_page)
 
     return render_template('login.html', error=error, next_page=next_page, role=request.args.get('role', ''))
