@@ -78,6 +78,59 @@
             color: #ffffff;
             text-decoration: underline;
         }
+        .user-menu {
+            position: relative;
+            margin-left: 14px;
+            padding-left: 14px;
+            border-left: 1px solid rgba(125, 211, 252, 0.35);
+            order: 99;
+        }
+        .user-menu summary {
+            list-style: none;
+            color: #9ec5fe;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-menu summary::-webkit-details-marker {
+            display: none;
+        }
+        .user-menu summary::after {
+            content: "\25be";
+            font-size: 11px;
+            opacity: 0.85;
+        }
+        .user-menu[open] summary::after {
+            content: "\25b4";
+        }
+        .user-menu-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 130px;
+            background: rgba(5, 23, 38, 0.98);
+            border: 1px solid rgba(125, 211, 252, 0.35);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(2, 6, 23, 0.45);
+            padding: 6px 0;
+            z-index: 30;
+        }
+        .user-menu-dropdown a {
+            display: block;
+            margin-left: 0;
+            padding: 8px 12px;
+            color: #d0e4ff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .user-menu-dropdown a:hover {
+            background: rgba(56, 189, 248, 0.18);
+            color: #ffffff;
+            text-decoration: none;
+        }
 
         main {
             padding: 30px 60px 60px;
@@ -420,12 +473,10 @@
         <a href="/resources">Resources</a>
         <a href="/about">About & Data</a>
         {% if current_user %}
-        <details class="nav-user-menu" style="order: 99; margin-left: 14px; position: relative;">
-            <summary style="cursor: pointer; list-style: none; color: #9ec5fe; font-weight: 600; white-space: nowrap; padding-left: 14px; border-left: 1px solid rgba(125, 211, 252, 0.35);">
-                {{ current_user.full_name }}
-            </summary>
-            <div style="position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; min-width: 140px; background: #0b1220; border: 1px solid rgba(125, 211, 252, 0.35); border-radius: 10px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); padding: 8px;">
-                <a href="/logout" style="display: block; margin: 0; padding: 8px 10px; color: #d0e4ff; text-decoration: none; border-radius: 6px;">Log out</a>
+        <details class="user-menu">
+            <summary>{{ current_user.full_name }}</summary>
+            <div class="user-menu-dropdown">
+                <a href="/logout">Logout</a>
             </div>
         </details>
         {% else %}
