@@ -320,6 +320,54 @@
             border-left: 3px solid rgba(56, 189, 248, 0.4);
         }
 
+        .resources-cta {
+            margin-top: 44px;
+            background: linear-gradient(135deg, #12265f, #1e3a8a);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 22px;
+            padding: 40px 24px;
+            text-align: center;
+            box-shadow: 0 18px 42px rgba(2, 6, 23, 0.5);
+        }
+
+        .resources-cta-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin: 0 0 16px;
+            color: #f8fafc;
+        }
+
+        .resources-cta-text {
+            max-width: 760px;
+            margin: 0 auto 28px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d1d5db;
+        }
+
+        .resources-cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 250px;
+            padding: 14px 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            background: transparent;
+            color: #f8fafc;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .resources-cta-button:hover {
+            background: rgba(148, 163, 184, 0.16);
+            border-color: rgba(226, 232, 240, 0.85);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 960px) {
             main {
                 padding: 24px 20px 40px;
@@ -329,6 +377,18 @@
             }
             .programs-grid {
                 grid-template-columns: 1fr;
+            }
+            .resources-cta {
+                padding: 34px 20px;
+            }
+            .resources-cta-title {
+                font-size: 22px;
+            }
+            .resources-cta-text {
+                font-size: 14px;
+            }
+            .resources-cta-button {
+                font-size: 14px;
             }
         }
 
@@ -393,6 +453,23 @@
             }
             .job-description {
                 font-size: 13px;
+            }
+            .resources-cta {
+                margin-top: 34px;
+                padding: 28px 14px;
+            }
+            .resources-cta-title {
+                font-size: 20px;
+            }
+            .resources-cta-text {
+                font-size: 13px;
+                margin-bottom: 22px;
+            }
+            .resources-cta-button {
+                width: 100%;
+                min-width: 0;
+                font-size: 14px;
+                padding: 12px 16px;
             }
         }
 
@@ -693,6 +770,15 @@
             could push real postings into this space via spreadsheets, forms, or APIs.
         </div>
     </div>
+
+    <section class="resources-cta">
+        <h2 class="resources-cta-title">Ready to Explore Staten Island's Data?</h2>
+        <p class="resources-cta-text">
+            Whether you're a business owner looking for market insights, a student seeking opportunities,
+            or a community leader planning initiatives, our dashboard has the data you need to make informed decisions.
+        </p>
+        <a class="resources-cta-button" href="/apply">Post an Opportunity</a>
+    </section>
 </main>
 
 <footer>
