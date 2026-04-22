@@ -303,21 +303,21 @@
         </a>
         <a href="javascript:history.back()" class="back-btn">← Back</a>
     </div>
-    
+    <nav>
         {% if current_user %}
-            {% if current_user %}
-            <span class="nav-user-name" style="order: 99; margin-left: 14px; padding-left: 14px; border-left: 1px solid rgba(125, 211, 252, 0.35); color: #9ec5fe; font-weight: 600; white-space: nowrap; cursor: default; pointer-events: none;">{{ current_user.full_name }}</span>
-            <a href="/logout">Logout</a>
-            {% else %}
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-            {% endif %}
-        <span class="nav-user-name" style="order: 99; margin-left: 14px; padding-left: 14px; border-left: 1px solid rgba(125, 211, 252, 0.35); color: #9ec5fe; font-weight: 600; white-space: nowrap; cursor: default; pointer-events: none;">{{ current_user.full_name }}</span>
-        <a href="/logout">Logout</a>
+        <details class="nav-user-menu" style="position: relative;">
+            <summary style="cursor: pointer; list-style: none; color: #9ec5fe; font-weight: 600; white-space: nowrap;">
+                {{ current_user.full_name }}
+            </summary>
+            <div style="position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; min-width: 140px; background: #0b1220; border: 1px solid rgba(125, 211, 252, 0.35); border-radius: 10px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); padding: 8px;">
+                <a href="/logout" style="display: block; margin: 0; padding: 8px 10px; color: #d0e4ff; text-decoration: none; border-radius: 6px;">Log out</a>
+            </div>
+        </details>
         {% else %}
         <a href="/login">Login</a>
         <a href="/register">Register</a>
         {% endif %}
+    </nav>
 </header>
 
 <main>
