@@ -167,6 +167,11 @@ sudo systemctl start myapp
 ### 6. Access Your App
 Visit: `http://YOUR_LIGHTSAIL_IP:8000/` (or `http://YOUR_LIGHTSAIL_IP/` if you run on port 80)
 
+Important:
+- Use `http://` explicitly while testing (not `https://` unless you set up TLS).
+- A bare IP like `YOUR_LIGHTSAIL_IP` tries port 80.
+- If Gunicorn runs on 8000, you must include `:8000` in the browser URL.
+
 ---
 
 ## Local Development
