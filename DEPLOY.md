@@ -83,19 +83,21 @@ Before running the app, configure Lightsail firewall:
 
 Default rules already allow SSH (22) and HTTP (80). Add custom port 8000 only for testing.
 
+If you are using EC2 (public IP like `34.x.x.x`) instead of Lightsail, also open the same port in your EC2 Security Group inbound rules.
+
 ### 5. Run the Application
 
 **Option A: Quick test (port 8000)**
 ```bash
 source venv/bin/activate
-gunicorn --bind 0.0.0.0:8000 --workers 2 app:app
+chmod +x start.sh
+./start.sh
 ```
 Visit: `http://YOUR_LIGHTSAIL_IP:8000/`
 
 **Option B: Production (port 80)**
 ```bash
-chmod +x start.sh
-sudo venv/bin/gunicorn --bind 0.0.0.0:80 --workers 2 app:app
+PORT=80 sudo ./start.sh
 ```
 Visit: `http://YOUR_LIGHTSAIL_IP/` (no port needed)
 
@@ -103,6 +105,19 @@ Visit: `http://YOUR_LIGHTSAIL_IP/` (no port needed)
 - Port 80 is open in Lightsail firewall (usually open by default)
 - You see "Listening at: http://0.0.0.0:80" in the output
 - No errors appear in the terminal
+
+Quick diagnostics if the public IP is not reachable:
+```bash
+# Check the app process
+ps aux | grep gunicorn
+
+# Verify the server is listening on the expected port
+sudo ss -ltnp | grep -E ':80|:8000'
+
+# Test from the server itself
+curl -I http://127.0.0.1:8000/
+curl -I http://127.0.0.1/
+```
 
 ### 5. Keep It Running (Optional)
 To keep the app running after you disconnect, use systemd:
@@ -117,7 +132,8 @@ After=network.target
 User=ubuntu
 WorkingDirectory=/home/ubuntu/myapp
 Environment="PATH=/home/ubuntu/myapp/venv/bin"
-ExecStart=/home/ubuntu/myapp/venv/bin/gunicorn --bind 0.0.0.0:80 --workers 2 app:app
+Environment="PORT=8000"
+ExecStart=/home/ubuntu/myapp/start.sh
 
 [Install]
 WantedBy=multi-user.target
@@ -131,13 +147,12 @@ sudo systemctl start myapp
 ```
 
 ### 6. Access Your App
-Visit: `http://YOUR_LIGHTSAIL_IP/`
+Visit: `http://YOUR_LIGHTSAIL_IP:8000/` (or `http://YOUR_LIGHTSAIL_IP/` if you run on port 80)
 
 ---
 
 ## Local Development
-To test locally, edit `app.py`:
-- Comment out: `app.run(host='0.0.0.0', port=8000)`
-- Uncomment: `app.run(debug=True)`
-
-Then run: `python app.py`
+Run locally with environment variables:
+```bash
+FLASK_DEBUG=1 PORT=8000 python app.py
+```

@@ -1555,10 +1555,11 @@ def api_site_assistant():
         }), 200
 
 if __name__ == "__main__":
-    # For local development
+    # Use environment-driven runtime settings so local and server runs share one code path.
+    host = os.getenv('APP_HOST', '0.0.0.0')
+    port = int(os.getenv('PORT', os.getenv('APP_PORT', '8000')))
+    debug = os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes')
+
     ensure_db_initialized()
-    app.run(host='0.0.0.0', port=8000, debug=True, use_reloader=False)
-    
-    # For production (AWS Lightsail), use:
-    # app.run(host='0.0.0.0', port=8000)
+    app.run(host=host, port=port, debug=debug, use_reloader=False)
 
