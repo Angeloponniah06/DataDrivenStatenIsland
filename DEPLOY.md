@@ -1,5 +1,23 @@
 # AWS Lightsail Deployment Guide
 
+## EC2 Public IP Quick Fix (for 34.x.x.x addresses)
+
+If Gunicorn shows `Listening at: http://0.0.0.0:8000` but the site is still unreachable from the internet, the app is running and EC2 network rules are blocking traffic.
+
+1. In AWS EC2 console, open your instance's **Security Group**.
+2. Add inbound rules:
+   - `Custom TCP`, port `8000`, source `0.0.0.0/0`
+   - `Custom TCP`, port `8000`, source `::/0`
+3. If UFW is enabled on Ubuntu, run:
+```bash
+sudo ufw allow 8000/tcp
+sudo ufw reload
+```
+4. Open the app using the port in the URL:
+   - `http://YOUR_PUBLIC_IP:8000`
+
+If you want URL without `:8000`, run Nginx on port 80 and reverse proxy to `127.0.0.1:8000`.
+
 ## Quick Deploy Steps
 
 ### 1. Create Lightsail Instance
