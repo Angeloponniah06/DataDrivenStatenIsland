@@ -138,31 +138,15 @@ curl -I http://127.0.0.1/
 ```
 
 ### 5. Keep It Running (Optional)
-To keep the app running after you disconnect, use systemd:
+To keep the app running after you disconnect, use systemd.
 
-Create `/etc/systemd/system/myapp.service`:
-```ini
-[Unit]
-Description=Data Driven Staten Island
-After=network.target
-
-[Service]
-User=ubuntu
-WorkingDirectory=/home/ubuntu/myapp
-Environment="PATH=/home/ubuntu/myapp/venv/bin"
-Environment="PORT=8000"
-ExecStart=/home/ubuntu/myapp/start.sh
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Then:
+From the project root on the server, run:
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable myapp
-sudo systemctl start myapp
+chmod +x deploy/install_ddsi_service.sh
+./deploy/install_ddsi_service.sh
 ```
+
+The service uses `start.sh`, which now synchronizes the tracked code from `origin/main` before launching Gunicorn while preserving the live `data.db` file. That means every service start begins from the latest committed code without wiping the production database.
 
 ### 6. Access Your App
 Visit: `http://YOUR_LIGHTSAIL_IP:8000/` (or `http://YOUR_LIGHTSAIL_IP/` if you run on port 80)

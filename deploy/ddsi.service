@@ -1,0 +1,18 @@
+[Unit]
+Description=Data Driven Staten Island
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/DataDriven/DataDrivenStatenIsland
+Environment=APP_HOST=0.0.0.0
+Environment=PORT=8000
+Environment=WEB_CONCURRENCY=2
+Environment=GIT_BRANCH=main
+ExecStart=/home/ubuntu/DataDriven/DataDrivenStatenIsland/start.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
